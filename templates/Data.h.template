@@ -2,6 +2,8 @@
 #define ${name}DATA_H
 
 $includes
+#include <type_traits>
+
 
 ${namespace_open}
 /** @class ${name}Data
@@ -13,6 +15,9 @@ class ${name}Data {
 public:
 $members
 };
+
+static_assert( std::is_trivially_copyable<${name}Data>::value, "Please check your definition of ${name} in the yaml file.") ;
+
 ${namespace_close}
 
 #endif

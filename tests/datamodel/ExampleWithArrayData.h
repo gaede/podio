@@ -5,6 +5,7 @@
 #include <array>
 
 #include "NotSoSimpleStruct.h"
+#include <type_traits>
 
 /** @class ExampleWithArrayData
  *  Datatype with an array member
@@ -21,5 +22,9 @@ public:
   std::array<ex2::NamespaceStruct, 4>
       structArray; ///< an array containing structs
 };
+
+static_assert(
+    std::is_trivially_copyable<ExampleWithArrayData>::value,
+    "Please check your definition of ExampleWithArray in the yaml file.");
 
 #endif
