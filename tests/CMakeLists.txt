@@ -1,7 +1,10 @@
+find_package( SIO REQUIRED)
+
 include_directories(
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/datamodel
-)
+  ${SIO_INCLUDE_DIRS}
+  )
 
 foreach( _conf ${CMAKE_CONFIGURATION_TYPES} )
   string(TOUPPER ${_conf} _conf )
@@ -17,6 +20,7 @@ file(GLOB headers_utils utilities/*.h)
 
 add_library(TestDataModel SHARED ${sources} ${sources_utils} ${headers} ${headers_utils})
 target_link_libraries(TestDataModel podio )
+target_link_libraries( TestDataModel ${SIO_LIBRARIES} )
 
 REFLEX_GENERATE_DICTIONARY(TestDataModel ${headers} SELECTION src/selection.xml)
 add_library(TestDataModelDict SHARED TestDataModel.cxx)
@@ -29,6 +33,7 @@ foreach( sourcefile ${executables} )
   string( REPLACE ".cpp" "" name ${sourcefile} )
   add_executable( ${name} ${sourcefile} )
   target_link_libraries( ${name} TestDataModelDict podio)
+  target_link_libraries( ${name} ${SIO_LIBRARIES} )
 endforeach( sourcefile ${executables} )
 
 #--- Adding tests --------------------------------------------------------------
@@ -65,8 +70,13 @@ set_property(TEST pyunittest PROPERTY DEPENDS write)
 
 add_test(NAME unittest COMMAND unittest)
 
+
+##add_test(NAME write_sio COMMAND write_sio)
+##set_property(TEST write_sio PROPERTY ENVIRONMENT LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/tests:$ENV{LD_LIBRARY_PATH})
+
 # Fail tests if there is any error in the output
 set_tests_properties(generate-edm write read read-multiple pyunittest unittest
     PROPERTIES FAIL_REGULAR_EXPRESSION "[^a-z]Error;ERROR;Failed"
 )
+
 
