@@ -8,6 +8,7 @@
 
 #include "EventInfoBlock.h"
 #include "ExampleMCBlock.h"
+#include "ExampleWithVectorMemberBlock.h"
 
 /**
  *  This example illustrate how to write a simple data structure.
@@ -55,6 +56,11 @@ int main( int argc, char **argv ) {
     auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
     mcpBlk->setCollection( &mcpCol ) ;
 
+    auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>() ;
+    blocks.push_back( vecBlk ) ;
+    auto& vecCol = store.create<ExampleWithVectorMemberCollection>("vectormember");
+    vecBlk->setCollection( &vecCol ) ;
+
 
 
     for(int i=0 ; i < 4 ; ++i){  // loop over events
@@ -71,7 +77,18 @@ int main( int argc, char **argv ) {
 	if( j>0 )
 	  mcp.adddaughters( mcpCol[ j-1 ] ) ;
       }
-      
+
+      auto vec = ExampleWithVectorMember();
+      vec.addcount(i);
+      vec.addcount(i+10);
+      vecCol.push_back(vec);
+      auto vec1 = ExampleWithVectorMember();
+      vec1.addcount(i+1);
+      vec1.addcount(i+11);
+      vec1.addcount(i+12);
+      vecCol.push_back(vec1);
+
+
       /// The record is first written in a buffer before being written 
       /// in a file. Let's create a buffer that will hold our record data.
       /// The buffer constructor requires a initial buffer size. Let's 
@@ -89,6 +106,7 @@ int main( int argc, char **argv ) {
       
       info.clear() ;
       mcpCol.clear() ;
+      vecCol.clear() ;
     }
 
 

@@ -8,6 +8,7 @@
 
 #include "EventInfoBlock.h"
 #include "ExampleMCBlock.h"
+#include "ExampleWithVectorMemberBlock.h"
 
 
 /**
@@ -62,6 +63,11 @@ int main( int argc, char **argv ) {
     mcpBlk->setCollection( &mcpCol ) ;
     mcpBlk->setCollectionProvider( &store ) ;
 
+    auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>() ;
+    blocks.push_back( vecBlk ) ;
+    auto& vecCol = store.create<ExampleWithVectorMemberCollection>("vectormember");
+    vecBlk->setCollection( &vecCol ) ;
+    vecBlk->setCollectionProvider( &store ) ;
 
     while(1){ // will read until eof-exception thrown ...
 
@@ -80,9 +86,11 @@ int main( int argc, char **argv ) {
       /// Let see what we got from the record:
       std::cout << " read back EventInfo collection : \n" << info << std::endl ;
       std::cout << " read back ExampleMC collection : \n" << mcpCol << std::endl ;
+      std::cout << " read back ExampleVecMem collection : \n" << vecCol << std::endl ;
 
       info.clear() ;
       mcpCol.clear() ;
+      vecCol.clear() ;
     }
     
     /// A bit of cleanup and we are done !
