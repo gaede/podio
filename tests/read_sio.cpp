@@ -52,7 +52,7 @@ int main( int argc, char **argv ) {
     /// We first create our particle block and add it to the list
     sio::block_list blocks {} ;
 
-    auto evtBlk = std::make_shared<EventInfoBlock>() ;
+    auto evtBlk = std::make_shared<EventInfoBlock>("info") ;
     blocks.push_back( evtBlk ) ;
     auto& info = store.create<EventInfoCollection>("info");
     evtBlk->setCollection( &info ) ;
@@ -63,7 +63,7 @@ int main( int argc, char **argv ) {
     mcpBlk->setCollection( &mcpCol ) ;
     mcpBlk->setCollectionProvider( &store ) ;
 
-    auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>() ;
+    auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>("vectormember") ;
     blocks.push_back( vecBlk ) ;
     auto& vecCol = store.create<ExampleWithVectorMemberCollection>("vectormember");
     vecBlk->setCollection( &vecCol ) ;

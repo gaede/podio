@@ -46,32 +46,25 @@ int main( int argc, char **argv ) {
     /// We first create our particle block and add it to the list
     sio::block_list blocks {} ;
 
-    auto evtBlk = std::make_shared<EventInfoBlock>() ;
-    blocks.push_back( evtBlk ) ;
+ 
     auto& info = store.create<EventInfoCollection>("info");
-    evtBlk->setCollection( &info ) ;
-
-    // auto mcpBlk = std::make_shared<ExampleMCBlock>() ;
-    // blocks.push_back( mcpBlk ) ;
-    // auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
-    // mcpBlk->setCollection( &mcpCol ) ;
+    const podio::CollectionBase* evtColB = nullptr ;
+    store.get("info" , evtColB );
+    auto evtBlk = BlockFactory::instance().createBlock( evtColB, "info") ;
+    blocks.push_back(evtBlk) ;
 
     auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
-    const podio::CollectionBase* colB = nullptr ;
-    store.get("mcparticle" ,colB );
-    // SIOBlock* dummyBlk = BlockFactory::instance().getBlock(std::type_index(typeid(*colB))) ;
-    // std::shared_ptr<SIOBlock>  mcpBlk( dummyBlk->create("mcparticle") ) ;
-    auto mcpBlk = BlockFactory::instance().createBlock( colB, "mcparticle") ; 
+    const podio::CollectionBase* mcpColB = nullptr ;
+    store.get("mcparticle" , mcpColB );
+    auto mcpBlk = BlockFactory::instance().createBlock( mcpColB, "mcparticle") ; 
     blocks.push_back(mcpBlk) ;
+   
 
-    mcpBlk->setCollection( const_cast< podio::CollectionBase* > ( colB ) ) ;
-
-
-    auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>() ;
-    blocks.push_back( vecBlk ) ;
     auto& vecCol = store.create<ExampleWithVectorMemberCollection>("vectormember");
-    vecBlk->setCollection( &vecCol ) ;
-
+    const podio::CollectionBase* vecColB = nullptr ;
+    store.get( "vectormember",vecColB );
+    auto vecBlk = BlockFactory::instance().createBlock( vecColB, "vectormember") ; 
+    blocks.push_back(vecBlk) ;
 
 
     for(int i=0 ; i < 4 ; ++i){  // loop over events

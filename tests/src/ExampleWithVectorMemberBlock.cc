@@ -1,4 +1,5 @@
 #include "ExampleWithVectorMemberBlock.h"
+
 #include <iostream>
 
 #include <sio/block.h>
@@ -7,12 +8,11 @@
 
 #define VECMEMTYPE0 int
 
-
 void ExampleWithVectorMemberBlock::read( sio::read_device &device,
 			   sio::version_type vers ) {
 
 
-  std::vector<ExampleWithVectorMemberData>* dataVec = _col->_getBuffer() ;
+  std::vector<ExampleWithVectorMemberData>* dataVec = static_cast<ExampleWithVectorMemberCollection*>(_col)->_getBuffer() ;
 
   unsigned size(0) ;
 
@@ -39,7 +39,7 @@ void ExampleWithVectorMemberBlock::read( sio::read_device &device,
   count = size * sizeof(VECMEMTYPE0) ;
   dataPtr = reinterpret_cast<char*>(&((*vec0)[0]));
   device.data( dataPtr , count ) ;
-  
+
   _col->prepareAfterRead() ;
   if(_store != nullptr ) 
     _col->setReferences( _store ) ;
@@ -50,9 +50,9 @@ void ExampleWithVectorMemberBlock::write( sio::write_device &device ){
   
   _col->prepareForWrite() ;
 
-  std::vector<ExampleWithVectorMemberData>* dataVec = _col->_getBuffer() ;
+  std::vector<ExampleWithVectorMemberData>* dataVec = static_cast<ExampleWithVectorMemberCollection*>(_col)->_getBuffer() ;
 
-  unsigned size = dataVec->size() ;
+  unsigned size =   dataVec->size() ;
   device.data( size ) ;
   unsigned count =  size * sizeof(ExampleWithVectorMemberData) ;
   char* dataPtr = reinterpret_cast<char*>(  & ( (*dataVec)[0] ) );
@@ -75,5 +75,6 @@ void ExampleWithVectorMemberBlock::write( sio::write_device &device ){
   count = size * sizeof(VECMEMTYPE0) ;
   dataPtr = reinterpret_cast<char*>(&((*vec0)[0]));
   device.data( dataPtr , count ) ;
+
 
 }

@@ -1,3 +1,6 @@
+#ifndef ExampleMCBlock_H
+#define ExampleMCBlock_H
+
 #include "SIOBlock.h"
 
 #include <sio/api.h>
@@ -35,5 +38,6 @@ public:
 };
 
 
-static ExampleMCBlock _exampleMCBlock ;
+static ExampleMCBlock _dummyExampleMCBlock ;
 
+#endif

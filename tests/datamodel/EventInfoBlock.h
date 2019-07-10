@@ -1,31 +1,43 @@
-#include <sio/block.h>
+#ifndef EventInfoBlock_H
+#define EventInfoBlock_H
+
+#include "SIOBlock.h"
+
+#include <sio/api.h>
 #include <sio/version.h>
 #include <sio/io_device.h>
-
 #include "EventInfoCollection.h"
 
+#include  <typeindex>
 
-class EventInfoBlock: public sio::block{
+
+
+class EventInfoBlock: public SIOBlock{
   
 public:
   
+  
   EventInfoBlock() :
-    sio::block( "EventInfo",
-		sio::version::encode_version(0, 1) ){
+    SIOBlock( "EventInfo", sio::version::encode_version(0, 1) ){
+    BlockFactory::instance().registerBlockForCollection( std::type_index(typeid(EventInfoCollection)), this) ;
+  }
+  
+  EventInfoBlock(const std::string &nam ) :
+    SIOBlock( nam+std::string("__EventInfo"), sio::version::encode_version(0, 1) ){
   }
   
   // Read the particle data from the device
   virtual void read( sio::read_device &device,
-	     sio::version_type vers ) override ;
+		     sio::version_type vers ) override ;
   
   // Write the particle data to the device
   virtual void write( sio::write_device &device ) override ;
   
+  SIOBlock* const create(const std::string name) override { return new EventInfoBlock(name) ; }
 
-  void setCollection(EventInfoCollection* col) { _col = col ; }
-
-private:
-  
-  EventInfoCollection*  _col{} ;
-  
 };
+
+
+static EventInfoBlock _dummyEventInfoBlock ;
+
+#endif
