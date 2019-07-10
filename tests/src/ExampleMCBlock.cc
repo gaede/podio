@@ -1,4 +1,5 @@
 #include "ExampleMCBlock.h"
+
 #include <iostream>
 
 #include <sio/block.h>
@@ -10,7 +11,7 @@ void ExampleMCBlock::read( sio::read_device &device,
 			   sio::version_type vers ) {
 
 
-  std::vector<ExampleMCData>* dataVec = _col->_getBuffer() ;
+  std::vector<ExampleMCData>* dataVec = static_cast<ExampleMCCollection*>(_col)->_getBuffer() ;
 
   unsigned size(0) ;
 
@@ -40,7 +41,7 @@ void ExampleMCBlock::write( sio::write_device &device ){
   
   _col->prepareForWrite() ;
 
-  std::vector<ExampleMCData>* dataVec = _col->_getBuffer() ;
+  std::vector<ExampleMCData>* dataVec = static_cast<ExampleMCCollection*>(_col)->_getBuffer() ;
 
   unsigned size =   dataVec->size() ;
   device.data( size ) ;

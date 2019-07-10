@@ -51,10 +51,21 @@ int main( int argc, char **argv ) {
     auto& info = store.create<EventInfoCollection>("info");
     evtBlk->setCollection( &info ) ;
 
-    auto mcpBlk = std::make_shared<ExampleMCBlock>() ;
-    blocks.push_back( mcpBlk ) ;
+    // auto mcpBlk = std::make_shared<ExampleMCBlock>() ;
+    // blocks.push_back( mcpBlk ) ;
+    // auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
+    // mcpBlk->setCollection( &mcpCol ) ;
+
     auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
-    mcpBlk->setCollection( &mcpCol ) ;
+    const podio::CollectionBase* colB = nullptr ;
+    store.get("mcparticle" ,colB );
+    // SIOBlock* dummyBlk = BlockFactory::instance().getBlock(std::type_index(typeid(*colB))) ;
+    // std::shared_ptr<SIOBlock>  mcpBlk( dummyBlk->create("mcparticle") ) ;
+    auto mcpBlk = BlockFactory::instance().createBlock( colB, "mcparticle") ; 
+    blocks.push_back(mcpBlk) ;
+
+    mcpBlk->setCollection( const_cast< podio::CollectionBase* > ( colB ) ) ;
+
 
     auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>() ;
     blocks.push_back( vecBlk ) ;

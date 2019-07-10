@@ -57,7 +57,7 @@ int main( int argc, char **argv ) {
     auto& info = store.create<EventInfoCollection>("info");
     evtBlk->setCollection( &info ) ;
 
-    auto mcpBlk = std::make_shared<ExampleMCBlock>() ;
+    auto mcpBlk = std::make_shared<ExampleMCBlock>("mcparticle") ;
     blocks.push_back( mcpBlk ) ;
     auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
     mcpBlk->setCollection( &mcpCol ) ;
