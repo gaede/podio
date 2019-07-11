@@ -7,6 +7,8 @@ file(GLOB headers ${CMAKE_SOURCE_DIR}/include/podio/*.h)
 
 # --- rm SIO stuff from library if not needed - fixme should go to sub dir ...
 if(NOT SIO_FOUND)
+  list(REMOVE_ITEM sources ${CMAKE_CURRENT_SOURCE_DIR}/SIOReader.cc)
+  list(REMOVE_ITEM headers ${CMAKE_SOURCE_DIR}/include/podio/SIOReader.h)
   list(REMOVE_ITEM sources ${CMAKE_CURRENT_SOURCE_DIR}/SIOWriter.cc)
   list(REMOVE_ITEM headers ${CMAKE_SOURCE_DIR}/include/podio/SIOWriter.h)
   list(REMOVE_ITEM headers ${CMAKE_SOURCE_DIR}/include/podio/SIOBlock.h)
