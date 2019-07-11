@@ -1,7 +1,7 @@
 #ifndef ExampleWithVectorMemberBlock_H
 #define ExampleWithVectorMemberBlock_H
 
-#include "SIOBlock.h"
+#include "podio/SIOBlock.h"
 
 #include <sio/api.h>
 #include <sio/version.h>
@@ -12,14 +12,14 @@
 
 
 
-class ExampleWithVectorMemberBlock: public SIOBlock{
+class ExampleWithVectorMemberBlock: public podio::SIOBlock{
   
 public:
   
   
   ExampleWithVectorMemberBlock() :
     SIOBlock( "ExampleWithVectorMember", sio::version::encode_version(0, 1) ){
-    BlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleWithVectorMemberCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleWithVectorMemberCollection)), this) ;
   }
   
   ExampleWithVectorMemberBlock(const std::string &nam ) :

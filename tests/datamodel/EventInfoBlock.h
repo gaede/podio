@@ -1,7 +1,7 @@
 #ifndef EventInfoBlock_H
 #define EventInfoBlock_H
 
-#include "SIOBlock.h"
+#include "podio/SIOBlock.h"
 
 #include <sio/api.h>
 #include <sio/version.h>
@@ -12,14 +12,14 @@
 
 
 
-class EventInfoBlock: public SIOBlock{
+class EventInfoBlock: public podio::SIOBlock{
   
 public:
   
   
   EventInfoBlock() :
     SIOBlock( "EventInfo", sio::version::encode_version(0, 1) ){
-    BlockFactory::instance().registerBlockForCollection( std::type_index(typeid(EventInfoCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(EventInfoCollection)), this) ;
   }
   
   EventInfoBlock(const std::string &nam ) :

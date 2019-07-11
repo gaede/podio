@@ -63,6 +63,13 @@ include(${ROOT_USE_FILE})
 
 add_definitions(-Wno-unused-variable -Wno-unused-parameter -pthread)
 
+#------ optionally build with SIO ---------------------------------------------
+find_package( SIO ) 
+if(SIO_FOUND)
+  MESSAGE( STATUS " Found SIO library - will build SIO I/O support " )
+  include_directories(${SIO_INCLUDE_DIRS})
+endif(SIO_FOUND)
+
 #--- enable unit testing capabilities ------------------------------------------
 include(CTest)
 

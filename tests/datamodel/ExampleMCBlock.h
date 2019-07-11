@@ -1,7 +1,7 @@
 #ifndef ExampleMCBlock_H
 #define ExampleMCBlock_H
 
-#include "SIOBlock.h"
+#include "podio/SIOBlock.h"
 
 #include <sio/api.h>
 #include <sio/version.h>
@@ -12,14 +12,14 @@
 
 
 
-class ExampleMCBlock: public SIOBlock{
+class ExampleMCBlock: public podio::SIOBlock{
   
 public:
   
   
   ExampleMCBlock() :
     SIOBlock( "ExampleMC", sio::version::encode_version(0, 1) ){
-    BlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleMCCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleMCCollection)), this) ;
   }
   
   ExampleMCBlock(const std::string &nam ) :

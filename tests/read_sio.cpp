@@ -5,6 +5,7 @@
 
 // podio specific includes
 #include "podio/EventStore.h"
+#include "podio/SIOBlock.h"
 
 #include "EventInfoBlock.h"
 #include "ExampleMCBlock.h"
@@ -52,22 +53,38 @@ int main( int argc, char **argv ) {
     /// We first create our particle block and add it to the list
     sio::block_list blocks {} ;
 
-    auto evtBlk = std::make_shared<EventInfoBlock>("info") ;
-    blocks.push_back( evtBlk ) ;
+    // auto evtBlk = std::make_shared<EventInfoBlock>("info") ;
+    // blocks.push_back( evtBlk ) ;
+    // auto& info = store.create<EventInfoCollection>("info");
+    // evtBlk->setCollection( &info ) ;
+
+    // auto mcpBlk = std::make_shared<ExampleMCBlock>("mcparticle") ;
+    // blocks.push_back( mcpBlk ) ;
+    // auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
+    // mcpBlk->setCollection( &mcpCol ) ;
+    // mcpBlk->setCollectionProvider( &store ) ;
+
+    // auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>("vectormember") ;
+    // blocks.push_back( vecBlk ) ;
+    // auto& vecCol = store.create<ExampleWithVectorMemberCollection>("vectormember");
+    // vecBlk->setCollection( &vecCol ) ;
+    // vecBlk->setCollectionProvider( &store ) ;
+    
     auto& info = store.create<EventInfoCollection>("info");
-    evtBlk->setCollection( &info ) ;
-
-    auto mcpBlk = std::make_shared<ExampleMCBlock>("mcparticle") ;
-    blocks.push_back( mcpBlk ) ;
-    auto& mcpCol = store.create<ExampleMCCollection>("mcparticle");
-    mcpBlk->setCollection( &mcpCol ) ;
+    auto evtBlk = podio::SIOBlockFactory::instance().createBlock( &info, "info") ;
+    blocks.push_back( evtBlk ) ;
+    
+    auto& mcpCol = store.create<ExampleMCCollection>("mcparticles");
+    auto mcpBlk = podio::SIOBlockFactory::instance().createBlock( &mcpCol, "mcparticles") ; 
     mcpBlk->setCollectionProvider( &store ) ;
-
-    auto vecBlk = std::make_shared<ExampleWithVectorMemberBlock>("vectormember") ;
-    blocks.push_back( vecBlk ) ;
-    auto& vecCol = store.create<ExampleWithVectorMemberCollection>("vectormember");
-    vecBlk->setCollection( &vecCol ) ;
+    blocks.push_back(mcpBlk) ;
+    
+    auto& vecCol = store.create<ExampleWithVectorMemberCollection>("WithVectorMember");
+    auto vecBlk = podio::SIOBlockFactory::instance().createBlock( &vecCol, "WithVectorMember") ; 
     vecBlk->setCollectionProvider( &store ) ;
+    blocks.push_back(vecBlk) ;
+
+
 
     while(1){ // will read until eof-exception thrown ...
 
