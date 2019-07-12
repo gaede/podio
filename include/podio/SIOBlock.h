@@ -11,6 +11,16 @@
 
 namespace podio {
 
+  template <typename devT, typename PODData>
+  void handlePODDataSIO( devT &device , PODData* data, size_t size) {
+
+    unsigned count =  size * sizeof(PODData) ;
+    char* dataPtr = reinterpret_cast<char*> (data) ;
+    device.data( dataPtr , count ) ;
+  }
+
+
+
 /// Base class for sio::block handlers used with PODIO
   class SIOBlock: public sio::block{
   

@@ -9,16 +9,17 @@
 
 
 namespace {
-  // for non POD data we have to copy the data srtucture's elements individually
+  // for non POD data we have to copy the data structure's elements individually
   template <typename devT>
   void handleNonPODData( ExampleWithStringData* data, devT &device , size_t size) {
 
     for(unsigned i=0; i<size;++i){
-      SIO_SDATA( device, data[i].theString ) ;
+      device.data( data[i].theString ) ;
     }
   }
-
 }
+
+
 
 
 void ExampleWithStringBlock::read( sio::read_device &device,
@@ -40,9 +41,7 @@ void ExampleWithStringBlock::read( sio::read_device &device,
   for( auto* refC : *refCols ){
     device.data( size ) ;
     refC->resize(size) ;
-    count =  size * sizeof(podio::ObjectID) ;
-    char* dataPtr = reinterpret_cast<char*>( &((*refC)[0]));
-    device.data( dataPtr , count ) ;
+    podio::handlePODDataSIO( device ,  &((*refC)[0]), size ) ;
   }
 
   _col->prepareAfterRead() ;
@@ -55,22 +54,19 @@ void ExampleWithStringBlock::write( sio::write_device &device ){
   
   _col->prepareForWrite() ;
 
-  std::vector<ExampleWithStringData>* dataVec = static_cast<ExampleWithStringCollection*>(_col)->_getBuffer() ;
+  auto * dataVec = static_cast<ExampleWithStringCollection*>(_col)->_getBuffer() ;
 
   unsigned size =   dataVec->size() ;
   device.data( size ) ;
 
   ::handleNonPODData( &(*dataVec)[0] , device, size ) ;
 
-
   //---- write ref collections -----
   podio::CollRefCollection* refCols = _col->referenceCollections() ;
   for( auto* refC : *refCols ){
     size = refC->size() ;
     device.data( size ) ;
-    unsigned count =  size * sizeof(podio::ObjectID) ;
-    char* dataPtr = reinterpret_cast<char*>(  & ( (*refC)[0] ) );
-    device.data( dataPtr , count ) ;
+    podio::handlePODDataSIO( device ,  &((*refC)[0]), size ) ;
   }
 
 
