@@ -31,16 +31,17 @@ void processEvent(podio::EventStore& store, bool verboser, unsigned eventNum) {
     throw std::runtime_error("Collection 'notthere' should not be valid");
   };
 
-//not yet  auto& strings = store.get<ExampleWithStringCollection>("strings");
-//not yet  if(strings.isValid()){
-//not yet    auto string = strings[0];
-//not yet    if (string.theString() != "SomeString") {
-//not yet      throw std::runtime_error("Couldn't read string properly");
-//not yet    }
-//not yet  } else {
-//not yet    throw std::runtime_error("Collection 'strings' should be present.");
-//not yet  }
-//not yet
+  auto& strings = store.get<ExampleWithStringCollection>("strings");
+  if(strings.isValid()){
+    auto string = strings[0];
+    if (string.theString() != "SomeString") {
+      throw std::runtime_error("Couldn't read string properly");
+    }
+    std::cout << "reading back strings :\n " << strings << std::endl ;
+  } else {
+    throw std::runtime_error("Collection 'strings' should be present.");
+  }
+
 //not yet  auto& clusters = store.get<ExampleClusterCollection>("clusters");
 //not yet  if(clusters.isValid()){
 //not yet    auto cluster = clusters[0];
@@ -213,6 +214,7 @@ int main(){
   reader.registerCollection<EventInfoCollection>("info",&store);
   reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
   reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
+  reader.registerCollection<ExampleWithStringCollection>("strings",&store);
 
   
   unsigned nEvents = 1410065408 ;

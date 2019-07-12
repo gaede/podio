@@ -50,7 +50,7 @@ int main(){
   writer.registerForWrite("WithVectorMember");
 //not yet  writer.registerForWrite("WithNamespaceMember");
 //not yet  writer.registerForWrite("WithNamespaceRelation");
-//not yet  writer.registerForWrite("strings");
+  writer.registerForWrite("strings");
 
   unsigned nevents=4 ; //2000;
 
@@ -199,8 +199,16 @@ int main(){
     rel.ref(namesp);
     namesprels.push_back(rel);
 
-    auto string = ExampleWithString("SomeString");
+    auto string  = ExampleWithString("SomeString");
+    auto string1 = ExampleWithString("SomeString1");
+    auto string2 = ExampleWithString("SomeString2XX-----Long----String----------------------------------------------------");
+    auto string3 = ExampleWithString("SomeString3XXX");
+    auto string4 = ExampleWithString("SomeString4XXXXXXX");
     strings.push_back(string);
+    strings.push_back(string1);
+    strings.push_back(string2);
+    strings.push_back(string3);
+    strings.push_back(string4);
 
     writer.writeEvent();
     store.clearCollections();
