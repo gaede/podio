@@ -8,11 +8,12 @@
 
 #define VECMEMTYPE0 int
 
+
 void ExampleWithVectorMemberBlock::read( sio::read_device &device,
 			   sio::version_type vers ) {
 
 
-  std::vector<ExampleWithVectorMemberData>* dataVec = static_cast<ExampleWithVectorMemberCollection*>(_col)->_getBuffer() ;
+  auto* dataVec = static_cast<ExampleWithVectorMemberCollection*>(_col)->_getBuffer() ;
 
   unsigned size(0) ;
 

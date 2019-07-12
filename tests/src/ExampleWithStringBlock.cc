@@ -14,8 +14,7 @@ namespace {
   void handleNonPODData( ExampleWithStringData* data, devT &device , size_t size) {
 
     for(unsigned i=0; i<size;++i){
-
-      SIO_DATA( device, &data->theString, 1 ) ;
+      SIO_SDATA( device, data[i].theString ) ;
     }
   }
 
@@ -26,7 +25,7 @@ void ExampleWithStringBlock::read( sio::read_device &device,
 			   sio::version_type vers ) {
 
 
-  std::vector<ExampleWithStringData>* dataVec = static_cast<ExampleWithStringCollection*>(_col)->_getBuffer() ;
+  auto* dataVec = static_cast<ExampleWithStringCollection*>(_col)->_getBuffer() ;
 
   unsigned size(0) ;
   unsigned count(0) ;
