@@ -19,11 +19,11 @@ public:
   
   EventInfoBlock() :
     SIOBlock( "EventInfo", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(EventInfoCollection)), this) ;
+///    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(EventInfoCollection)), this) ;
   }
   
   EventInfoBlock(const std::string &nam ) :
-    SIOBlock( nam+std::string("__EventInfo"), sio::version::encode_version(0, 1) ){
+    SIOBlock( nam+std::string("__EventInfoXXX"), sio::version::encode_version(0, 1) ){
   }
   
   // Read the particle data from the device

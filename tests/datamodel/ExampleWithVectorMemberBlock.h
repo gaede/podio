@@ -19,11 +19,11 @@ public:
   
   ExampleWithVectorMemberBlock() :
     SIOBlock( "ExampleWithVectorMember", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleWithVectorMemberCollection)), this) ;
+//    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleWithVectorMemberCollection)), this) ;
   }
   
   ExampleWithVectorMemberBlock(const std::string &nam ) :
-    SIOBlock( nam+std::string("__ExampleWithVectorMember"), sio::version::encode_version(0, 1) ){
+    SIOBlock( nam+std::string("__ExampleWithVectorMemberXX"), sio::version::encode_version(0, 1) ){
   }
   
   // Read the particle data from the device

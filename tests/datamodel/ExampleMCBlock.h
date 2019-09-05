@@ -19,11 +19,11 @@ public:
   
   ExampleMCBlock() :
     SIOBlock( "ExampleMC", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleMCCollection)), this) ;
+///    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ExampleMCCollection)), this) ;
   }
   
   ExampleMCBlock(const std::string &nam ) :
-    SIOBlock( nam+std::string("__ExampleMC"), sio::version::encode_version(0, 1) ){
+    SIOBlock( nam+std::string("__ExampleMCXXX"), sio::version::encode_version(0, 1) ){
   }
   
   // Read the particle data from the device

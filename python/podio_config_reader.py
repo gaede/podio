@@ -133,7 +133,10 @@ class PodioConfigReader(object):
             # should getters / setters be prefixed with get / set?
             "getSyntax": False,
             # should POD members be exposed with getters/setters in classes that have them as members?
-            "exposePODMembers": True}
+            "exposePODMembers": True,
+            # should SIO block handlers be created
+            "createSIOHandlers":False
+        }
 
     @staticmethod
     def handle_extracode(definition):

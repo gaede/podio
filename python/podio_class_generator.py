@@ -77,6 +77,7 @@ class ClassGenerator(object):
             self.create_class(name, components)
             self.create_collection(name, components)
             self.create_obj(name, components)
+            self.create_sio(name, components)
             # self.create_PrintInfo(name, components)
 
     def print_report(self):
@@ -1018,6 +1019,113 @@ class ClassGenerator(object):
       self.fill_templates("Obj",substitutions)
       self.created_classes.append(classname+"Obj")
 
+    def create_sio(self, classname, definition):
+      """ Create an SIOBlock containing all information
+          relevant for a streaming with SIO.
+      """
+      namespace, rawclassname, namespace_open, namespace_close = self.demangle_classname(classname)
+
+      relations = ""
+      includes = ""
+      includes_cc = ""
+      forward_declarations = ""
+      forward_declarations_namespace = {"":[]}
+      initialize_relations = ""
+      set_relations = ""
+      deepcopy_relations = ""
+      delete_relations = ""
+      delete_singlerelations = ""
+      refvectors = definition["OneToManyRelations"]
+      singleRelations = definition["OneToOneRelations"]
+      # do includes and forward declarations for
+      # oneToOneRelations and do proper cleanups
+      for item in singleRelations:
+        name  = item["name"]
+        klass = item["type"]
+        klassname = klass
+        mnamespace = ""
+        if klass not in self.buildin_types:
+          if "::" in klass:
+            mnamespace, klassname = klass.split("::")
+            klassWithQualifier = "::"+mnamespace+"::Const"+klassname
+            if mnamespace not in forward_declarations_namespace.keys():
+              forward_declarations_namespace[mnamespace] = []
+          else:
+            klassWithQualifier = "Const"+klass
+        else:
+          klassWithQualifier = klass
+
+        if mnamespace != "":
+          relations+= "  ::%s::Const%s* m_%s;\n" %(mnamespace, klassname, name)
+        else:
+          relations+= "  Const%s* m_%s;\n" %(klassname, name)
+
+        if klass not in self.buildin_types:
+          if klass != classname:
+            forward_declarations_namespace[mnamespace] += ['class Const%s;\n' %(klassname)]
+            includes_cc += '#include "%sConst.h"\n' %(klassname)
+            initialize_relations += ", m_%s(nullptr)\n" %(name)
+            # for deep copy initialise as nullptr and set in copy ctor body if copied object has non-trivial relation
+            deepcopy_relations += ", m_%s(nullptr)" % (name)
+            set_relations += implementations["set_relations"].format(name=name, klass=klassWithQualifier)
+          delete_singlerelations+="\t\tif (m_%s != nullptr) delete m_%s;\n" % (name, name)
+
+      for nsp in forward_declarations_namespace.iterkeys():
+        if nsp != "":
+          forward_declarations += "namespace %s {" % nsp
+        forward_declarations += "".join(forward_declarations_namespace[nsp])
+        if nsp != "":
+          forward_declarations += "}\n"
+
+      if len(refvectors+definition["VectorMembers"]) !=0:
+        includes += "#include <vector>\n"
+
+      for item in refvectors+definition["VectorMembers"]:
+        name  = item["name"]
+        klass = item["type"]
+        if klass not in self.buildin_types:
+          if klass not in self.reader.components:
+            if "::" in klass:
+              mnamespace, klassname = klass.split("::")
+              klassWithQualifier = "::"+mnamespace+"::Const"+klassname
+            else:
+              klassWithQualifier = "Const"+klass
+          else:
+              klassWithQualifier = klass
+          relations += "\tstd::vector<%s>* m_%s;\n" %(klassWithQualifier, name)
+          initialize_relations += ", m_%s(new std::vector<%s>())" %(name,klassWithQualifier)
+          deepcopy_relations += ", m_%s(new std::vector<%s>(*(other.m_%s)))" %(name,klassWithQualifier,name)
+          if klass == classname:
+            includes_cc += '#include "%s.h"\n' %(rawclassname)
+          else:
+            if "::" in klass:
+              mnamespace, klassname = klass.split("::")
+              includes += '#include "%s.h"\n' %klassname
+            else:
+              includes += '#include "%s.h"\n' %klass
+        else:
+            relations += "\tstd::vector<%s>* m_%s;\n" %(klass, name)
+            initialize_relations += ", m_%s(new std::vector<%s>())" %(name,klass)
+            deepcopy_relations += ", m_%s(new std::vector<%s>(*(other.m_%s)))" %(name,klass,name)
+
+        delete_relations += "\t\tdelete m_%s;\n" %(name)
+      substitutions = { "name" : rawclassname,
+                        "includes" : includes,
+                        "includes_cc" : includes_cc,
+                        "forward_declarations" : forward_declarations,
+                        "relations" : relations,
+                        "initialize_relations" : initialize_relations,
+                        "deepcopy_relations" : deepcopy_relations,
+                        "delete_relations" : delete_relations,
+                        "delete_singlerelations" : delete_singlerelations,
+                        "namespace" : namespace,
+                        "namespace_open" : namespace_open,
+                        "namespace_close" : namespace_close,
+                        "set_deepcopy_relations": set_relations
+      }
+      self.fill_templates("SIOBlock",substitutions)
+##      self.created_classes.append(classname+"SIOBlock")
+
     def prepare_vectorized_access(self, classname,members ):
       implementation = ""
       declaration = ""
@@ -1062,6 +1170,9 @@ class ClassGenerator(object):
         endings = ("h")
       elif category == "Obj":
         FN = "Obj"
+        endings = ("h","cc")
+      elif category == "SIOBlock":
+        FN = "SIOBlock"
         endings = ("h","cc")
       elif category == "Component":
         FN = ""

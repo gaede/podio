@@ -19,7 +19,14 @@ namespace {
   }
 }
 
-
+namespace podio{
+  template <typename devT >
+  void handlePODDataSIO( devT &device , ExampleWithStringData* data, size_t size) {
+    for(unsigned i=0; i<size;++i){
+      device.data( data[i].theString ) ;
+    }
+  }
+}
 
 
 void ExampleWithStringBlock::read( sio::read_device &device,
@@ -34,8 +41,9 @@ void ExampleWithStringBlock::read( sio::read_device &device,
   device.data( size ) ;
   dataVec->resize( size) ;
 
-  ::handleNonPODData( &(*dataVec)[0] , device, size ) ;
-  
+  //::handleNonPODData( &(*dataVec)[0] , device, size ) ;
+  podio::handlePODDataSIO( device ,  &(*dataVec)[0], size ) ;
+ 
   //---- read ref collections -----
   podio::CollRefCollection* refCols = _col->referenceCollections() ;
   for( auto* refC : *refCols ){
@@ -59,7 +67,8 @@ void ExampleWithStringBlock::write( sio::write_device &device ){
   unsigned size =   dataVec->size() ;
   device.data( size ) ;
 
-  ::handleNonPODData( &(*dataVec)[0] , device, size ) ;
+//  ::handleNonPODData( &(*dataVec)[0] , device, size ) ;
+  podio::handlePODDataSIO( device ,  &(*dataVec)[0], size ) ;
 
   //---- write ref collections -----
   podio::CollRefCollection* refCols = _col->referenceCollections() ;

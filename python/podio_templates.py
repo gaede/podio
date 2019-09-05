@@ -122,3 +122,14 @@ implementations["ctor_list_relation"] = ", m_rel_{name}(new std::vector<{namespa
 #-----------------------------------
 declarations["vecmembers"] = "\tstd::vector<{type}>* m_vec_{name}; /// combined vector of all objects in collection\n"
 declarations["vecmembers"] += "\tstd::vector<std::vector<{type}>*> m_vecs_{name}; /// pointers to individual member vectors\n"
+
+implementations["vecmems_readsio"] = """ std::vector<{type}>* vec{Num} =  *reinterpret_cast< std::vector<{type}>** >( vecMemInfo->at({Num}).second ) ;
+  device.data( size ) ;
+  vec{Num}->resize(size) ;
+  podio::handlePODDataSIO( device, &((*vec{Num})[0]), size ) ;
+"""
+implementations["vecmems_writesio"] = """ std::vector<{type}>* vec{Num} =  *reinterpret_cast< std::vector<{type}>** >( vecMemInfo->at({Num}).second ) ;
+  size = vec{Num}->size() ;
+  device.data( size ) ;
+  podio::handlePODDataSIO( device, &((*vec{Num})[0]), size ) ;
+"""
