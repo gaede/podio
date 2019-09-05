@@ -6,7 +6,8 @@
 #include <sio/version.h>
 #include <sio/io_device.h>
 
-//fixme: need non-pod sio handling ....
+
+$nonpodsiodata_fun
 
 ${namespace_open}
 

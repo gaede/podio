@@ -6,7 +6,15 @@
 #include <sio/io_device.h>
 #include <sio/version.h>
 
-// fixme: need non-pod sio handling ....
+namespace podio {
+template <typename devT>
+void handlePODDataSIO(devT &device, ::ExampleWithStringData *data,
+                      size_t size) {
+  for (unsigned i = 0; i < size; ++i) {
+    device.data(data[i].theString);
+  }
+}
+} // namespace podio
 
 void ExampleWithStringSIOBlock::read(sio::read_device &device,
                                      sio::version_type vers) {

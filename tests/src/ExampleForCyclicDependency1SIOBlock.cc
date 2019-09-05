@@ -6,8 +6,6 @@
 #include <sio/io_device.h>
 #include <sio/version.h>
 
-// fixme: need non-pod sio handling ....
-
 void ExampleForCyclicDependency1SIOBlock::read(sio::read_device &device,
                                                sio::version_type vers) {
 

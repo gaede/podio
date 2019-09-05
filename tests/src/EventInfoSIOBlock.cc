@@ -6,8 +6,6 @@
 #include <sio/io_device.h>
 #include <sio/version.h>
 
-// fixme: need non-pod sio handling ....
-
 void EventInfoSIOBlock::read(sio::read_device &device, sio::version_type vers) {
 
   auto *dataVec = static_cast<::EventInfoCollection *>(_col)->_getBuffer();

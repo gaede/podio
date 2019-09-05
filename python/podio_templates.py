@@ -133,3 +133,14 @@ implementations["vecmems_writesio"] = """ std::vector<{type}>* vec{Num} =  *rein
   device.data( size ) ;
   podio::handlePODDataSIO( device, &((*vec{Num})[0]), size ) ;
 """
+
+implementations["nonpodsiodata"] = """ 
+namespace podio{{
+  template <typename devT >
+  void handlePODDataSIO( devT &device, {namespace}::{name}Data* data, size_t size) {{
+    for(unsigned i=0; i<size;++i){{
+      {handle_members}
+    }}
+  }}
+}}
+"""

@@ -1026,6 +1026,22 @@ class ClassGenerator(object):
       namespace, rawclassname, namespace_open, namespace_close = self.demangle_classname(classname)
       vecmems_readsio_impl = ""
       vecmems_writesio_impl = ""
+      nonpodsiodata_fun = ""
+      handle_members = ""
+
+      isPOD = True
+      members = definition["Members"]
+      for member in members:
+        klass = member["type"]
+        name = member["name"]
+        if "std::string" == klass:
+          isPOD = False
+
+      if not isPOD:
+        for member in members:
+          name = member["name"]
+          handle_members += "device.data( data[i].{name});\n".format(name=name)
+        nonpodsiodata_fun = implementations["nonpodsiodata"].format(name=rawclassname,namespace=namespace,handle_members=handle_members)
 
       vmcount = 0
       for item in definition["VectorMembers"]:        
@@ -1041,7 +1057,8 @@ class ClassGenerator(object):
                         "namespace_open" : namespace_open,
                         "namespace_close" : namespace_close,
                         "vecmems_readsio_impl" : vecmems_readsio_impl,
-                        "vecmems_writesio_impl" : vecmems_writesio_impl
+                        "vecmems_writesio_impl" : vecmems_writesio_impl,
+                        "nonpodsiodata_fun" : nonpodsiodata_fun
                         
       }
       self.fill_templates("SIOBlock",substitutions)

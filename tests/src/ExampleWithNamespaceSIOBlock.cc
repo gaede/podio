@@ -6,8 +6,6 @@
 #include <sio/io_device.h>
 #include <sio/version.h>
 
-// fixme: need non-pod sio handling ....
-
 namespace ex {
 
 void ExampleWithNamespaceSIOBlock::read(sio::read_device &device,
