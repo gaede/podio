@@ -34,8 +34,6 @@ void ExampleWithNamespaceSIOBlock::read(sio::read_device &device,
   //---- read vector members
   podio::VectorMembersInfo *vecMemInfo = _col->vectorMembers();
 
-  /// vecmems_readsio_impl
-
   // --------------
   _col->prepareAfterRead();
   if (_store != nullptr)
@@ -65,8 +63,6 @@ void ExampleWithNamespaceSIOBlock::write(sio::write_device &device) {
 
   //---- write vector members
   podio::VectorMembersInfo *vecMemInfo = _col->vectorMembers();
-
-  /// vecmems_writesio_impl
 }
 
 } // namespace ex

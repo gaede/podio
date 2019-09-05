@@ -32,7 +32,11 @@ void ExampleWithVectorMemberSIOBlock::read(sio::read_device &device,
   //---- read vector members
   podio::VectorMembersInfo *vecMemInfo = _col->vectorMembers();
 
-  /// vecmems_readsio_impl
+  std::vector<int> *vec0 =
+      *reinterpret_cast<std::vector<int> **>(vecMemInfo->at(0).second);
+  device.data(size);
+  vec0->resize(size);
+  podio::handlePODDataSIO(device, &((*vec0)[0]), size);
 
   // --------------
   _col->prepareAfterRead();
@@ -64,5 +68,9 @@ void ExampleWithVectorMemberSIOBlock::write(sio::write_device &device) {
   //---- write vector members
   podio::VectorMembersInfo *vecMemInfo = _col->vectorMembers();
 
-  /// vecmems_writesio_impl
+  std::vector<int> *vec0 =
+      *reinterpret_cast<std::vector<int> **>(vecMemInfo->at(0).second);
+  size = vec0->size();
+  device.data(size);
+  podio::handlePODDataSIO(device, &((*vec0)[0]), size);
 }

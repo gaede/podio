@@ -34,7 +34,7 @@ void ${name}SIOBlock::read( sio::read_device &device,
   //---- read vector members
   podio::VectorMembersInfo * vecMemInfo = _col->vectorMembers() ;
 
-///vecmems_readsio_impl
+  $vecmems_readsio_impl
   
   // --------------
   _col->prepareAfterRead() ;
@@ -65,7 +65,7 @@ void ${name}SIOBlock::write( sio::write_device &device ){
   //---- write vector members
   podio::VectorMembersInfo * vecMemInfo = _col->vectorMembers() ;
 
- ///vecmems_writesio_impl
+ $vecmems_writesio_impl
 
 }
 
