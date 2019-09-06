@@ -10,6 +10,8 @@
 #include "ExampleWithNamespaceCollection.h"
 #include "ExampleWithARelationCollection.h"
 #include "ExampleWithStringCollection.h"
+#include "ExampleWithArrayCollection.h"
+#include "StructWithArray.h"
 
 // STL
 #include <iostream>
@@ -19,13 +21,12 @@
 #include "podio/EventStore.h"
 #include "podio/SIOWriter.h"
 
-int main(){
-
+void write(std::string outfilename) {
   std::cout<<"start processing"<<std::endl;
 
   auto store = podio::EventStore();
-//  auto writer = podio::SIOWriter("example.sio", &store);
-  podio::SIOWriter writer("example.sio", &store);
+//  auto writer = podio::SIOWriter(outfilename, &store);
+  podio::SIOWriter writer(outfilename, &store);
 
   auto& info       = store.create<EventInfoCollection>("info");
   auto& mcps       = store.create<ExampleMCCollection>("mcparticles");
@@ -38,7 +39,9 @@ int main(){
   auto& vecs       = store.create<ExampleWithVectorMemberCollection>("WithVectorMember");
   auto& namesps    = store.create<ex::ExampleWithNamespaceCollection>("WithNamespaceMember");
   auto& namesprels = store.create<ex::ExampleWithARelationCollection>("WithNamespaceRelation");
+  auto& cpytest    = store.create<ex::ExampleWithARelationCollection>("WithNamespaceRelationCopy");
   auto& strings    = store.create<ExampleWithStringCollection>("strings");
+  auto& arrays     = store.create<ExampleWithArrayCollection>("arrays");
   writer.registerForWrite("info");
   writer.registerForWrite("mcparticles");
   writer.registerForWrite("hits");
@@ -50,9 +53,11 @@ int main(){
   writer.registerForWrite("WithVectorMember");
   writer.registerForWrite("WithNamespaceMember");
   writer.registerForWrite("WithNamespaceRelation");
+  writer.registerForWrite("WithNamespaceRelationCopy");
   writer.registerForWrite("strings");
+  writer.registerForWrite("arrays");
 
-  unsigned nevents=4 ; //2000;
+  unsigned nevents = 2000;
 
   for(unsigned i=0; i<nevents; ++i) {
     if(i % 1000 == 0) {
@@ -94,23 +99,23 @@ int main(){
     // --- add some daughter relations
     auto p = ExampleMC();
     auto d = ExampleMC();
- 
-    p = mcps[0] ; 
+
+    p = mcps[0] ;
     p.adddaughters( mcps[2] ) ;
     p.adddaughters( mcps[3] ) ;
     p.adddaughters( mcps[4] ) ;
     p.adddaughters( mcps[5] ) ;
-    p = mcps[1] ; 
+    p = mcps[1] ;
     p.adddaughters( mcps[2] ) ;
     p.adddaughters( mcps[3] ) ;
     p.adddaughters( mcps[4] ) ;
     p.adddaughters( mcps[5] ) ;
-    p = mcps[2] ; 
+    p = mcps[2] ;
     p.adddaughters( mcps[6] ) ;
     p.adddaughters( mcps[7] ) ;
     p.adddaughters( mcps[8] ) ;
     p.adddaughters( mcps[9] ) ;
-    p = mcps[3] ; 
+    p = mcps[3] ;
     p.adddaughters( mcps[6] ) ;
     p.adddaughters( mcps[7] ) ;
     p.adddaughters( mcps[8] ) ;
@@ -118,22 +123,22 @@ int main(){
 
     //--- now fix the parent relations
     for( unsigned j=0,N=mcps.size();j<N;++j){
-      p = mcps[j] ; 
+      p = mcps[j] ;
       for(auto it = p.daughters_begin(), end = p.daughters_end() ; it!=end ; ++it ){
-	int dIndex = it->getObjectID().index ;
-	d = mcps[ dIndex ] ;
-	d.addparents( p ) ;
+  int dIndex = it->getObjectID().index ;
+  d = mcps[ dIndex ] ;
+  d.addparents( p ) ;
       }
     }
     //-------- print relations for debugging:
     for( auto p : mcps ){
       std::cout << " particle " << p.getObjectID().index << " has daughters: " ;
       for(auto it = p.daughters_begin(), end = p.daughters_end() ; it!=end ; ++it ){
-	std::cout << " " << it->getObjectID().index ;
+  std::cout << " " << it->getObjectID().index ;
       }
       std::cout << "  and parents: " ;
       for(auto it = p.parents_begin(), end = p.parents_end() ; it!=end ; ++it ){
-	std::cout << " " << it->getObjectID().index ;
+  std::cout << " " << it->getObjectID().index ;
       }
       std::cout << std::endl ;
     }
@@ -185,34 +190,63 @@ int main(){
     oneRels.push_back(oneRelEmpty);
 
     auto vec = ExampleWithVectorMember();
-    vec.addcount(23);
-    vec.addcount(24);
+    vec.addcount(i);
+    vec.addcount(i+10);
     vecs.push_back(vec);
+    auto vec1 = ExampleWithVectorMember();
+    vec1.addcount(i+1);
+    vec1.addcount(i+11);
+    vecs.push_back(vec1);
 
+    for (int j = 0; j < 5; j++) {
+      auto rel = ex::ExampleWithARelation();
+      rel.number(0.5*j);
+      auto exWithNamesp = ex::ExampleWithNamespace();
+      exWithNamesp.data().x = i;
+      exWithNamesp.data().y = 1000*i;
+      namesps.push_back(exWithNamesp);
+      if (j != 3) { // also check for empty relations
+        rel.ref(exWithNamesp);
+        for (int k = 0; k < 5; k++) {
+          auto namesp = ex::ExampleWithNamespace();
+          namesp.x(3*k);
+          namesp.data().y = k;
+          namesps.push_back(namesp);
+          rel.addrefs(namesp);
+        }
+      }
+      namesprels.push_back(rel);
+    }
+    for (int j = 0; j < namesprels.size(); ++j) {
+      cpytest.push_back(namesprels.at(j).clone());
+    }
 
-    auto namesp = ex::ExampleWithNamespace();
-    namesp.data().x = 1;
-    namesp.data().y = i;
-    namesps.push_back(namesp);
-
-    auto rel = ex::ExampleWithARelation();
-    rel.ref(namesp);
-    namesprels.push_back(rel);
-
-    auto string  = ExampleWithString("SomeString");
-    auto string1 = ExampleWithString("SomeString1");
-    auto string2 = ExampleWithString("SomeString2XX-----Long----String----------------------------------------------------");
-    auto string3 = ExampleWithString("SomeString3XXX");
-    auto string4 = ExampleWithString("SomeString4XXXXXXX");
+    auto string = ExampleWithString("SomeString");
     strings.push_back(string);
-    strings.push_back(string1);
-    strings.push_back(string2);
-    strings.push_back(string3);
-    strings.push_back(string4);
+
+    std::array<int, 4> arrayTest = {0, 0, 2, 3};
+    std::array<int, 4> arrayTest2 = {4, 4, 2 * static_cast<int>(i)};
+    NotSoSimpleStruct a;
+    a.data.p = arrayTest2;
+    ex2::NamespaceStruct nstruct;
+    nstruct.x = static_cast<int>(i);
+    std::array<ex2::NamespaceStruct, 4> structArrayTest = {nstruct, nstruct, nstruct, nstruct};
+    auto array = ExampleWithArray(a, arrayTest, arrayTest, arrayTest, arrayTest, structArrayTest);
+    array.myArray(1, i);
+    array.arrayStruct(a);
+    arrays.push_back(array);
 
     writer.writeEvent();
     store.clearCollections();
   }
 
   writer.finish();
+}
+
+
+int main(int argc, char* argv[]){
+  write("example.sio");
+  write("example1.sio");
+
+
 }

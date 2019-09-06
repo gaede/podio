@@ -226,8 +226,10 @@ int main(){
   reader.registerCollection<ExampleWithOneRelationCollection>("OneRelation",&store);
   reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
   reader.registerCollection<ex::ExampleWithNamespaceCollection>("WithNamespaceMember",&store);
-   reader.registerCollection<ex::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
+  reader.registerCollection<ex::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
+  reader.registerCollection<ex::ExampleWithARelationCollection>("WithNamespaceRelationCopy",&store);
   reader.registerCollection<ExampleWithStringCollection>("strings",&store);
+  reader.registerCollection<ExampleWithArrayCollection>("arrays",&store);
 
   
   unsigned nEvents = 1410065408 ;
