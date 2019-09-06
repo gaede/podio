@@ -25,7 +25,7 @@ void write(std::string outfilename) {
   std::cout<<"start processing"<<std::endl;
 
   auto store = podio::EventStore();
-//  auto writer = podio::SIOWriter(outfilename, &store);
+  //auto writer = podio::SIOWriter(outfilename, &store);
   podio::SIOWriter writer(outfilename, &store);
 
   auto& info       = store.create<EventInfoCollection>("info");

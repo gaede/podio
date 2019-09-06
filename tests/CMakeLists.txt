@@ -73,7 +73,8 @@ set_property(TEST pyunittest PROPERTY DEPENDS write)
 add_test(NAME unittest COMMAND unittest)
 
 
-##add_test(NAME write_sio COMMAND write_sio)
+add_test(NAME write_sio COMMAND write_sio)
+add_test(NAME read_sio COMMAND read_sio)
 ##set_property(TEST write_sio PROPERTY ENVIRONMENT LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/tests:$ENV{LD_LIBRARY_PATH})
 
 # Fail tests if there is any error in the output

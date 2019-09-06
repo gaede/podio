@@ -211,10 +211,6 @@ int main(){
   // define which collections to read from the file
   // for now this has to be exact same order as used for writing !
   //  -- will be fixed when meta data is also written to sio file ....
-  // reader.registerCollection<EventInfoCollection>("info",&store);
-  // reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
-  // reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
-  // reader.registerCollection<ExampleWithStringCollection>("strings",&store);
 
   reader.registerCollection<EventInfoCollection>("info",&store);
   reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
@@ -232,21 +228,28 @@ int main(){
   reader.registerCollection<ExampleWithArrayCollection>("arrays",&store);
 
   
-  unsigned nEvents = 1410065408 ;
-  for(unsigned i=0; i<nEvents; ++i) {
+  try{
+    unsigned nEvents = 1410065408 ;
+    for(unsigned i=0; i<nEvents; ++i) {
 
-    if(i%1000==0)
-      std::cout<<"reading event "<<i<<std::endl;
+      if(i%1000==0)
+	std::cout<<"reading event "<<i<<std::endl;
 
-    reader.readEvent() ;
+      reader.readEvent() ;
 
-    processEvent(store, true, i);
+      processEvent(store, true, i);
 
-    // only clear collections for re-use
-    store.clearCollections();
-    // store.clear(); // this would delete the collections as well ...
-
+      // only clear collections for re-use
+      store.clearCollections();
+      // store.clear(); // this would delete the collections as well ...
+    }
   }
+  catch( sio::exception &e ) {
+    if( e.code() != sio::error_code::eof ) {
+      SIO_RETHROW( e, e.code(), "SIOReader::readStream: Couldn't read stream" ) ;
+    }
+  }
+
   reader.closeFile();
   return 0;
 }
