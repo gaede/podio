@@ -35,11 +35,6 @@ void ExampleWithVectorMemberSIOBlock::read(sio::read_device &device,
   device.data(size);
   vec0->resize(size);
   podio::handlePODDataSIO(device, &((*vec0)[0]), size);
-
-  // --------------
-  _col->prepareAfterRead();
-  if (_store != nullptr)
-    _col->setReferences(_store);
 }
 
 // Write the particle data to the device

@@ -27,11 +27,6 @@ void ExampleMCSIOBlock::read(sio::read_device &device, sio::version_type vers) {
 
   //---- read vector members
   podio::VectorMembersInfo *vecMemInfo = _col->vectorMembers();
-
-  // --------------
-  _col->prepareAfterRead();
-  if (_store != nullptr)
-    _col->setReferences(_store);
 }
 
 // Write the particle data to the device

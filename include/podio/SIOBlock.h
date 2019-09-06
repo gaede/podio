@@ -32,7 +32,14 @@ namespace podio {
     }
   
     void setCollection(podio::CollectionBase* col) { _col = col ; }
-    void setCollectionProvider(podio::ICollectionProvider* iCP ){ _store = iCP ; } 
+    void setCollectionProvider(podio::ICollectionProvider* iCP ){ _store = iCP ; }
+
+    void prepareAfterRead(){ _col->prepareAfterRead(); }
+
+    void setReferences(){
+      if(_store != nullptr)
+	_col->setReferences(_store);
+    }
 
     virtual SIOBlock* const create(const std::string name)=0 ;
   

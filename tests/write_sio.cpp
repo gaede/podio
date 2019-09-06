@@ -41,15 +41,15 @@ int main(){
   auto& strings    = store.create<ExampleWithStringCollection>("strings");
   writer.registerForWrite("info");
   writer.registerForWrite("mcparticles");
-//not yet  writer.registerForWrite("hits");
-//not yet  writer.registerForWrite("clusters");
-//not yet  writer.registerForWrite("refs");
-//not yet  writer.registerForWrite("refs2");
-//not yet  writer.registerForWrite("Component");
-//not yet  writer.registerForWrite("OneRelation");
+  writer.registerForWrite("hits");
+  writer.registerForWrite("clusters");
+  writer.registerForWrite("refs");
+  writer.registerForWrite("refs2");
+  writer.registerForWrite("Component");
+  writer.registerForWrite("OneRelation");
   writer.registerForWrite("WithVectorMember");
-//not yet  writer.registerForWrite("WithNamespaceMember");
-//not yet  writer.registerForWrite("WithNamespaceRelation");
+  writer.registerForWrite("WithNamespaceMember");
+  writer.registerForWrite("WithNamespaceRelation");
   writer.registerForWrite("strings");
 
   unsigned nevents=4 ; //2000;

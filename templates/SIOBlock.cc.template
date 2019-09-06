@@ -37,10 +37,6 @@ void ${name}SIOBlock::read( sio::read_device &device,
 
   $vecmems_readsio_impl
   
-  // --------------
-  _col->prepareAfterRead() ;
-  if(_store != nullptr ) 
-    _col->setReferences( _store ) ;
 }
   
 // Write the particle data to the device

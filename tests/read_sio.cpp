@@ -19,7 +19,7 @@
 #include "ExampleWithComponentCollection.h"
 #include "ExampleWithARelationCollection.h"
 #include "ExampleWithStringCollection.h"
-#include "ExampleWithNamespace.h"
+#include "ExampleWithNamespaceCollection.h"
 #include "ExampleWithArrayCollection.h"
 
 int glob = 0;
@@ -42,16 +42,16 @@ void processEvent(podio::EventStore& store, bool verboser, unsigned eventNum) {
     throw std::runtime_error("Collection 'strings' should be present.");
   }
 
-//not yet  auto& clusters = store.get<ExampleClusterCollection>("clusters");
-//not yet  if(clusters.isValid()){
-//not yet    auto cluster = clusters[0];
-//not yet    for (auto i = cluster.Hits_begin(), end = cluster.Hits_end(); i!=end; ++i){
-//not yet      std::cout << "  Referenced hit has an energy of " << i->energy() << std::endl;
-//not yet      glob++;
-//not yet    }
-//not yet  } else {
-//not yet    throw std::runtime_error("Collection 'clusters' should be present");
-//not yet  }
+  auto& clusters = store.get<ExampleClusterCollection>("clusters");
+  if(clusters.isValid()){
+    auto cluster = clusters[0];
+    for (auto i = cluster.Hits_begin(), end = cluster.Hits_end(); i!=end; ++i){
+      std::cout << "  Referenced hit has an energy of " << i->energy() << std::endl;
+      glob++;
+    }
+  } else {
+    throw std::runtime_error("Collection 'clusters' should be present");
+  }
 
 
   auto& mcps =  store.get<ExampleMCCollection>("mcparticles");
@@ -104,27 +104,27 @@ void processEvent(podio::EventStore& store, bool verboser, unsigned eventNum) {
   }
 
 
-//not yet  //std::cout << "Fetching collection 'refs'" << std::endl;
-//not yet  auto& refs = store.get<ExampleReferencingTypeCollection>("refs");
-//not yet  if(refs.isValid()){
-//not yet    auto ref = refs[0];
-//not yet    for (auto j = ref.Clusters_begin(), end = ref.Clusters_end(); j!=end; ++j){
-//not yet      for (auto i = j->Hits_begin(), end = j->Hits_end(); i!=end; ++i){
-//not yet        //std::cout << "  Referenced object has an energy of " << i->energy() << std::endl;
-//not yet        glob++;
-//not yet      }
-//not yet    }
-//not yet  } else {
-//not yet    throw std::runtime_error("Collection 'refs' should be present");
-//not yet  }
-//not yet  //std::cout << "Fetching collection 'OneRelation'" << std::endl;
-//not yet  auto& rels = store.get<ExampleWithOneRelationCollection>("OneRelation");
-//not yet  if(rels.isValid()) {
-//not yet    //std::cout << "Referenced object has an energy of " << (*rels)[0].cluster().energy() << std::endl;
-//not yet    glob++;
-//not yet  } else {
-//not yet    throw std::runtime_error("Collection 'OneRelation' should be present");
-//not yet  }
+  //std::cout << "Fetching collection 'refs'" << std::endl;
+  auto& refs = store.get<ExampleReferencingTypeCollection>("refs");
+  if(refs.isValid()){
+    auto ref = refs[0];
+    for (auto j = ref.Clusters_begin(), end = ref.Clusters_end(); j!=end; ++j){
+      for (auto i = j->Hits_begin(), end = j->Hits_end(); i!=end; ++i){
+        //std::cout << "  Referenced object has an energy of " << i->energy() << std::endl;
+        glob++;
+      }
+    }
+  } else {
+    throw std::runtime_error("Collection 'refs' should be present");
+  }
+  //std::cout << "Fetching collection 'OneRelation'" << std::endl;
+  auto& rels = store.get<ExampleWithOneRelationCollection>("OneRelation");
+  if(rels.isValid()) {
+    //std::cout << "Referenced object has an energy of " << (*rels)[0].cluster().energy() << std::endl;
+    glob++;
+  } else {
+    throw std::runtime_error("Collection 'OneRelation' should be present");
+  }
 
 //  std::cout << "Fetching collection 'WithVectorMember'" << std::endl;
   auto& vecs = store.get<ExampleWithVectorMemberCollection>("WithVectorMember");
@@ -139,64 +139,64 @@ void processEvent(podio::EventStore& store, bool verboser, unsigned eventNum) {
     throw std::runtime_error("Collection 'WithVectorMember' should be present");
   }
 
-//not yet  auto& comps = store.get<ExampleWithComponentCollection>("Component");
-//not yet  if (comps.isValid()) {
-//not yet    auto comp = comps[0];
-//not yet    int a = comp.component().data.x + comp.component().data.z;
-//not yet  }
-//not yet
-//not yet  auto& arrays = store.get<ExampleWithArrayCollection>("arrays");
-//not yet  if (arrays.isValid() && arrays.size() != 0) {
-//not yet    auto array = arrays[0];
-//not yet    if (array.myArray(1) != eventNum) {
-//not yet      throw std::runtime_error("Array not properly set.");
-//not yet    }
-//not yet    if (array.arrayStruct().data.p.at(2) != 2*eventNum) {
-//not yet      throw std::runtime_error("Array not properly set.");
-//not yet    }
-//not yet    if (array.structArray(0).x != eventNum) {
-//not yet      throw std::runtime_error("Array of struct not properly set.");
-//not yet    }
-//not yet  } else {
-//not yet    throw std::runtime_error("Collection 'arrays' should be present");
-//not yet  }
-//not yet
-//not yet  auto& nmspaces = store.get<ex::ExampleWithARelationCollection>("WithNamespaceRelation");
-//not yet  auto& copies = store.get<ex::ExampleWithARelationCollection>("WithNamespaceRelationCopy");
-//not yet  auto& cpytest = store.create<ex::ExampleWithARelationCollection>("TestConstCopy");
-//not yet  if (nmspaces.isValid() && copies.isValid()) {
-//not yet    for (int j = 0; j < nmspaces.size(); j++) {
-//not yet      auto nmsp = nmspaces[j];
-//not yet      auto cpy = copies[j];
-//not yet      cpytest.push_back(nmsp.clone());
-//not yet      if (nmsp.ref().isAvailable()) {
-//not yet        if (nmsp.ref().data().x != cpy.ref().data().x || nmsp.ref().data().y != cpy.ref().data().y) {
-//not yet          throw std::runtime_error("Copied item has differing data in OneToOne referenced item.");
-//not yet        }
-//not yet        // check direct accessors of POD sub members
-//not yet        if (nmsp.ref().x() != cpy.ref().x()) {
-//not yet          throw std::runtime_error("Getting wrong values when using direct accessors for sub members.");
-//not yet        }
-//not yet        if (nmsp.number() != cpy.number()) {
-//not yet          throw std::runtime_error("Copied item has differing member.");
-//not yet        }
-//not yet        if (!(nmsp.ref().getObjectID() == cpy.ref().getObjectID())) {
-//not yet          throw std::runtime_error("Copied item has wrong OneToOne references.");
-//not yet        }
-//not yet      }
-//not yet      auto cpy_it = cpy.refs_begin();
-//not yet      for (auto it = nmsp.refs_begin(); it != nmsp.refs_end(); ++it, ++cpy_it) {
-//not yet        if (it->data().x != cpy_it->data().x || it->data().y != cpy_it->data().y) {
-//not yet          throw std::runtime_error("Copied item has differing data in OneToMany referenced item.");
-//not yet        }
-//not yet        if (!(it->getObjectID() == cpy_it->getObjectID())) {
-//not yet          throw std::runtime_error("Copied item has wrong OneToMany references.");
-//not yet        }
-//not yet      }
-//not yet    }
-//not yet  } else {
-//not yet    throw std::runtime_error("Collection 'WithNamespaceRelation' and 'WithNamespaceRelationCopy' should be present");
-//not yet  }
+  auto& comps = store.get<ExampleWithComponentCollection>("Component");
+  if (comps.isValid()) {
+    auto comp = comps[0];
+    int a = comp.component().data.x + comp.component().data.z;
+  }
+
+  auto& arrays = store.get<ExampleWithArrayCollection>("arrays");
+  if (arrays.isValid() && arrays.size() != 0) {
+    auto array = arrays[0];
+    if (array.myArray(1) != eventNum) {
+      throw std::runtime_error("Array not properly set.");
+    }
+    if (array.arrayStruct().data.p.at(2) != 2*eventNum) {
+      throw std::runtime_error("Array not properly set.");
+    }
+    if (array.structArray(0).x != eventNum) {
+      throw std::runtime_error("Array of struct not properly set.");
+    }
+  } else {
+    throw std::runtime_error("Collection 'arrays' should be present");
+  }
+
+  auto& nmspaces = store.get<ex::ExampleWithARelationCollection>("WithNamespaceRelation");
+  auto& copies = store.get<ex::ExampleWithARelationCollection>("WithNamespaceRelationCopy");
+  auto& cpytest = store.create<ex::ExampleWithARelationCollection>("TestConstCopy");
+  if (nmspaces.isValid() && copies.isValid()) {
+    for (int j = 0; j < nmspaces.size(); j++) {
+      auto nmsp = nmspaces[j];
+      auto cpy = copies[j];
+      cpytest.push_back(nmsp.clone());
+      if (nmsp.ref().isAvailable()) {
+        if (nmsp.ref().data().x != cpy.ref().data().x || nmsp.ref().data().y != cpy.ref().data().y) {
+          throw std::runtime_error("Copied item has differing data in OneToOne referenced item.");
+        }
+        // check direct accessors of POD sub members
+        if (nmsp.ref().x() != cpy.ref().x()) {
+          throw std::runtime_error("Getting wrong values when using direct accessors for sub members.");
+        }
+        if (nmsp.number() != cpy.number()) {
+          throw std::runtime_error("Copied item has differing member.");
+        }
+        if (!(nmsp.ref().getObjectID() == cpy.ref().getObjectID())) {
+          throw std::runtime_error("Copied item has wrong OneToOne references.");
+        }
+      }
+      auto cpy_it = cpy.refs_begin();
+      for (auto it = nmsp.refs_begin(); it != nmsp.refs_end(); ++it, ++cpy_it) {
+        if (it->data().x != cpy_it->data().x || it->data().y != cpy_it->data().y) {
+          throw std::runtime_error("Copied item has differing data in OneToMany referenced item.");
+        }
+        if (!(it->getObjectID() == cpy_it->getObjectID())) {
+          throw std::runtime_error("Copied item has wrong OneToMany references.");
+        }
+      }
+    }
+  } else {
+    throw std::runtime_error("Collection 'WithNamespaceRelation' and 'WithNamespaceRelationCopy' should be present");
+  }
 }
 
 int main(){
@@ -211,9 +211,22 @@ int main(){
   // define which collections to read from the file
   // for now this has to be exact same order as used for writing !
   //  -- will be fixed when meta data is also written to sio file ....
+  // reader.registerCollection<EventInfoCollection>("info",&store);
+  // reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
+  // reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
+  // reader.registerCollection<ExampleWithStringCollection>("strings",&store);
+
   reader.registerCollection<EventInfoCollection>("info",&store);
   reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
+  reader.registerCollection<ExampleHitCollection>("hits",&store);
+  reader.registerCollection<ExampleClusterCollection>("clusters",&store);
+  reader.registerCollection<ExampleReferencingTypeCollection>("refs",&store);
+  reader.registerCollection<ExampleReferencingTypeCollection>("refs2",&store);
+  reader.registerCollection<ExampleWithComponentCollection>("Component",&store);
+  reader.registerCollection<ExampleWithOneRelationCollection>("OneRelation",&store);
   reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
+  reader.registerCollection<ex::ExampleWithNamespaceCollection>("WithNamespaceMember",&store);
+   reader.registerCollection<ex::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
   reader.registerCollection<ExampleWithStringCollection>("strings",&store);
 
   

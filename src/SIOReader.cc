@@ -38,6 +38,13 @@ namespace podio {
     sio::api::read_record_data( m_stream, m_rec_info, m_rec_buffer ) ;
     sio::api::read_blocks( m_rec_buffer.span( 0, m_rec_info._data_length ), m_blocks ) ;
 
+    for( auto bl : m_blocks ){ // creates the object layer
+      static_cast<SIOBlock*>(bl.get())->prepareAfterRead();
+    }
+    for( auto bl : m_blocks ){  // resolves the references
+      static_cast<SIOBlock*>(bl.get())->setReferences();
+    }
+
 
     // m_inputs.emplace_back(std::make_pair(collection,name));
 
