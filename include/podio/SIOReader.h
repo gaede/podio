@@ -74,7 +74,8 @@ namespace podio {
       m_table.add( name ) ;
     }
     
-    
+    void endOfEvent(){ /*no_opt */}
+
   private:
     typedef std::pair<CollectionBase*, std::string> Input;
     std::vector<Input> m_inputs;
