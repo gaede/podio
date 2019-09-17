@@ -1041,6 +1041,17 @@ class ClassGenerator(object):
         for member in members:
           name = member["name"]
           handle_members += "device.data( data[i].{name});\n".format(name=name)
+        for member in definition["VectorMembers"]:
+          name = ("%s_begin" % member["name"] )
+          handle_members += "device.data( data[i].{name});\n".format(name=name)
+          name = ("%s_end" % member["name"] )
+          handle_members += "device.data( data[i].{name});\n".format(name=name)
+        for member in definition["OneToManyRelations"]:
+          name = ("%s_begin" % member["name"] )
+          handle_members += "device.data( data[i].{name});\n".format(name=name)
+          name = ("%s_end" % member["name"] )
+          handle_members += "device.data( data[i].{name});\n".format(name=name)
+
         nonpodsiodata_fun = implementations["nonpodsiodata"].format(name=rawclassname,namespace=namespace,handle_members=handle_members)
 
       vmcount = 0
