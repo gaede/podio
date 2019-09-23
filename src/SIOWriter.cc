@@ -1,6 +1,7 @@
 
 // SIO specifc includes
 #include "sio/block.h"
+#include "sio/compression/zlib.h"
 
 // podio specific includes
 #include "podio/CollectionBase.h"
@@ -28,6 +29,7 @@ namespace podio {
   void SIOWriter::writeEvent(){
 
     m_buffer.clear() ;
+    m_com_buffer.clear() ;
     
     for (auto& coll : m_storedCollections){
       coll->prepareForWrite();
@@ -35,9 +37,13 @@ namespace podio {
     // write the record to the sio buffer
     auto rec_info = sio::api::write_record( "event_record", m_buffer, m_blocks, 0 ) ;
 
-    /// and now write record to the file !
-    sio::api::write_record( m_stream, m_buffer.span(), rec_info ) ;
+    // use zlib to compress the record into another buffer
+    sio::zlib_compression compressor ;
+    compressor.set_level( 6 ) ;  // Z_DEFAULT_COMPRESSION==6
+    sio::api::compress_record( rec_info, m_buffer, m_com_buffer, compressor ) ;
 
+    // and now write record to the file !
+    sio::api::write_record( m_stream, m_buffer.span(0, rec_info._header_length), m_com_buffer.span(), rec_info ) ;
   }
 
   void SIOWriter::finish(){

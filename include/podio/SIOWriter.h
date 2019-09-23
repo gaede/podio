@@ -14,6 +14,7 @@
 #include <sio/api.h>
 
 
+
 // forward declarations
 
 
@@ -38,6 +39,7 @@ namespace podio {
     sio::ofstream m_stream{} ;
     sio::block_list  m_blocks {} ;
     sio::buffer m_buffer{ sio::mbyte } ;
+    sio::buffer m_com_buffer{ sio::mbyte } ;
  
     std::vector<CollectionBase*> m_storedCollections{};
   };

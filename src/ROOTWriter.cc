@@ -16,7 +16,13 @@ namespace podio {
     m_file(new TFile(filename.c_str(),"RECREATE","data file")),
     m_datatree(new TTree("events","Events tree")),
     m_metadatatree(new TTree("metadata", "Metadata tree"))
-  {}
+  {
+    // m_file->SetCompressionAlgorithm(ROOT::RCompressionSetting::EAlgorithm::kZLIB );
+    // m_file->SetCompressionLevel(ROOT::RCompressionSetting::ELevel::kDefaultZLIB);
+    // m_file->SetCompressionAlgorithm(ROOT::RCompressionSetting::EAlgorithm::kLZ4 );
+    // m_file->SetCompressionLevel(ROOT::RCompressionSetting::ELevel::kDefaultLZ4);
+
+  }
 
   ROOTWriter::~ROOTWriter(){
     delete m_file;

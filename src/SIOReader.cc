@@ -1,3 +1,5 @@
+#include <sio/compression/zlib.h>
+
 // podio specific includes
 #include "podio/SIOReader.h"
 
@@ -31,12 +33,16 @@ namespace podio {
 
   void SIOReader::readEvent(){
   
-    // clear old collections
-    //m_inputs.clear() ;
 
-    sio::api::read_record_info( m_stream, m_rec_info, m_info_buffer ) ;
-    sio::api::read_record_data( m_stream, m_rec_info, m_rec_buffer ) ;
-    sio::api::read_blocks( m_rec_buffer.span( 0, m_rec_info._data_length ), m_blocks ) ;
+    sio::record_info rec_info ;
+    sio::api::read_record_info( m_stream, rec_info, m_info_buffer ) ;
+    sio::api::read_record_data( m_stream, rec_info, m_rec_buffer ) ;
+
+    m_unc_buffer.resize( rec_info._uncompressed_length ) ;
+    sio::zlib_compression compressor ;
+    compressor.uncompress( m_rec_buffer.span(), m_unc_buffer ) ;
+
+    sio::api::read_blocks( m_unc_buffer.span(), m_blocks ) ;
 
     for( auto bl : m_blocks ){ // creates the object layer
       static_cast<SIOBlock*>(bl.get())->prepareAfterRead();
@@ -44,10 +50,6 @@ namespace podio {
     for( auto bl : m_blocks ){  // resolves the references
       static_cast<SIOBlock*>(bl.get())->setReferences();
     }
-
-
-    // m_inputs.emplace_back(std::make_pair(collection,name));
-
   }
 
   bool SIOReader::isValid() const {

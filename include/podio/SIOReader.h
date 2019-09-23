@@ -86,6 +86,7 @@ namespace podio {
     sio::record_info m_rec_info{} ;
     sio::buffer      m_info_buffer{ sio::max_record_info_len } ;
     sio::buffer      m_rec_buffer{ sio::mbyte } ;
+    sio::buffer      m_unc_buffer{ sio::mbyte } ;
     sio::block_list  m_blocks {} ;
 
   };
