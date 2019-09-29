@@ -161,9 +161,9 @@ void processEvent(podio::EventStore& store, bool verboser, unsigned eventNum) {
     throw std::runtime_error("Collection 'arrays' should be present");
   }
 
-  auto& nmspaces = store.get<ex::ExampleWithARelationCollection>("WithNamespaceRelation");
-  auto& copies = store.get<ex::ExampleWithARelationCollection>("WithNamespaceRelationCopy");
-  auto& cpytest = store.create<ex::ExampleWithARelationCollection>("TestConstCopy");
+  auto& nmspaces = store.get<ex42::ExampleWithARelationCollection>("WithNamespaceRelation");
+  auto& copies = store.get<ex42::ExampleWithARelationCollection>("WithNamespaceRelationCopy");
+  auto& cpytest = store.create<ex42::ExampleWithARelationCollection>("TestConstCopy");
   if (nmspaces.isValid() && copies.isValid()) {
     for (int j = 0; j < nmspaces.size(); j++) {
       auto nmsp = nmspaces[j];
@@ -221,9 +221,9 @@ int main(){
   reader.registerCollection<ExampleWithComponentCollection>("Component",&store);
   reader.registerCollection<ExampleWithOneRelationCollection>("OneRelation",&store);
   reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
-  reader.registerCollection<ex::ExampleWithNamespaceCollection>("WithNamespaceMember",&store);
-  reader.registerCollection<ex::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
-  reader.registerCollection<ex::ExampleWithARelationCollection>("WithNamespaceRelationCopy",&store);
+  reader.registerCollection<ex42::ExampleWithNamespaceCollection>("WithNamespaceMember",&store);
+  reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
+  reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelationCopy",&store);
   reader.registerCollection<ExampleWithStringCollection>("strings",&store);
   reader.registerCollection<ExampleWithArrayCollection>("arrays",&store);
 

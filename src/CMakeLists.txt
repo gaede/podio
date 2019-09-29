@@ -34,7 +34,7 @@ add_dependencies(podioDict podio-dictgen)
 target_link_libraries(podioDict podio ROOT::Core)
 
 if(SIO_FOUND)
-  target_link_libraries(podio     ${SIO_LIBRARIES})
+  target_link_libraries(podio  PUBLIC   ${SIO_LIBRARIES})
   target_link_libraries(podioDict ${SIO_LIBRARIES})
 endif()
 
