@@ -21,7 +21,7 @@ public:
   
   ExampleMCSIOBlock() :
     SIOBlock( "ExampleMC", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleMCCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleMC"), this) ;
   }
   
   ExampleMCSIOBlock(const std::string &nam ) :

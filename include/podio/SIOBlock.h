@@ -6,7 +6,7 @@
 #include <podio/CollectionBase.h>
 
 #include <map>
-#include <typeindex>
+#include <string>
 
 
 namespace podio {
@@ -51,7 +51,7 @@ namespace podio {
   };
 
 
-  typedef std::map<std::type_index,SIOBlock*> BlockMap ;
+  typedef std::map<std::string,SIOBlock*> BlockMap ;
 
 /// factory for creating sio::blocks for a given type of EDM-collection
   class SIOBlockFactory{
@@ -59,11 +59,12 @@ namespace podio {
     SIOBlockFactory(){};
     BlockMap  _map ;
   public:
-    void registerBlockForCollection(std::type_index id, SIOBlock* b){_map[id] = b ; }
+    void registerBlockForCollection(std::string type, SIOBlock* b){_map[type] = b ; }
 
     std::shared_ptr<SIOBlock> createBlock( const podio::CollectionBase* col, std::string name){
-      std::type_index id( typeid(*col) ) ;
-      auto it=_map.find(id) ;
+      std::string typeStr =  col->getValueTypeName() ;
+
+      auto it=_map.find(typeStr) ;
     
       if( it!= _map.end() ){
 	SIOBlock* blk= it->second->create( name ) ;

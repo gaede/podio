@@ -21,7 +21,7 @@ public:
   
   ExampleWithStringSIOBlock() :
     SIOBlock( "ExampleWithString", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleWithStringCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleWithString"), this) ;
   }
   
   ExampleWithStringSIOBlock(const std::string &nam ) :

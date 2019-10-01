@@ -21,7 +21,7 @@ public:
   
   ExampleWithVectorMemberSIOBlock() :
     SIOBlock( "ExampleWithVectorMember", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleWithVectorMemberCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleWithVectorMember"), this) ;
   }
   
   ExampleWithVectorMemberSIOBlock(const std::string &nam ) :

@@ -21,7 +21,7 @@ public:
   
   ${name}SIOBlock() :
     SIOBlock( "${name}", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(${namespace}::${name}Collection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("${classname}"), this) ;
   }
   
   ${name}SIOBlock(const std::string &nam ) :

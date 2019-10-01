@@ -21,7 +21,7 @@ public:
   
   ExampleWithComponentSIOBlock() :
     SIOBlock( "ExampleWithComponent", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleWithComponentCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleWithComponent"), this) ;
   }
   
   ExampleWithComponentSIOBlock(const std::string &nam ) :

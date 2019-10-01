@@ -21,7 +21,7 @@ public:
   
   ExampleHitSIOBlock() :
     SIOBlock( "ExampleHit", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleHitCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleHit"), this) ;
   }
   
   ExampleHitSIOBlock(const std::string &nam ) :

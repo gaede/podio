@@ -1065,6 +1065,7 @@ class ClassGenerator(object):
         
       substitutions = { "name" : rawclassname,
                         "namespace" : namespace,
+                        "classname" : classname,
                         "namespace_open" : namespace_open,
                         "namespace_close" : namespace_close,
                         "vecmems_readsio_impl" : vecmems_readsio_impl,

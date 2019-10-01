@@ -21,7 +21,7 @@ public:
   
   ExampleWithNamespaceSIOBlock() :
     SIOBlock( "ExampleWithNamespace", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ex42::ExampleWithNamespaceCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ex42::ExampleWithNamespace"), this) ;
   }
   
   ExampleWithNamespaceSIOBlock(const std::string &nam ) :

@@ -21,7 +21,7 @@ public:
   
   ExampleWithArraySIOBlock() :
     SIOBlock( "ExampleWithArray", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleWithArrayCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleWithArray"), this) ;
   }
   
   ExampleWithArraySIOBlock(const std::string &nam ) :

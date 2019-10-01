@@ -21,7 +21,7 @@ public:
   
   ExampleWithOneRelationSIOBlock() :
     SIOBlock( "ExampleWithOneRelation", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleWithOneRelationCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleWithOneRelation"), this) ;
   }
   
   ExampleWithOneRelationSIOBlock(const std::string &nam ) :

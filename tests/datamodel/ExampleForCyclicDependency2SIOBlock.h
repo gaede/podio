@@ -21,7 +21,7 @@ public:
   
   ExampleForCyclicDependency2SIOBlock() :
     SIOBlock( "ExampleForCyclicDependency2", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleForCyclicDependency2Collection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleForCyclicDependency2"), this) ;
   }
   
   ExampleForCyclicDependency2SIOBlock(const std::string &nam ) :

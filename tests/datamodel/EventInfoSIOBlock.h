@@ -21,7 +21,7 @@ public:
   
   EventInfoSIOBlock() :
     SIOBlock( "EventInfo", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::EventInfoCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("EventInfo"), this) ;
   }
   
   EventInfoSIOBlock(const std::string &nam ) :

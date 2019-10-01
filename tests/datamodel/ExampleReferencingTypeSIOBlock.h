@@ -21,7 +21,7 @@ public:
   
   ExampleReferencingTypeSIOBlock() :
     SIOBlock( "ExampleReferencingType", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleReferencingTypeCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleReferencingType"), this) ;
   }
   
   ExampleReferencingTypeSIOBlock(const std::string &nam ) :

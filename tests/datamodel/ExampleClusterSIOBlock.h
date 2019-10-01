@@ -21,7 +21,7 @@ public:
   
   ExampleClusterSIOBlock() :
     SIOBlock( "ExampleCluster", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(::ExampleClusterCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleCluster"), this) ;
   }
   
   ExampleClusterSIOBlock(const std::string &nam ) :

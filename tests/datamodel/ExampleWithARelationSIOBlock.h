@@ -21,7 +21,7 @@ public:
   
   ExampleWithARelationSIOBlock() :
     SIOBlock( "ExampleWithARelation", sio::version::encode_version(0, 1) ){
-    podio::SIOBlockFactory::instance().registerBlockForCollection( std::type_index(typeid(ex42::ExampleWithARelationCollection)), this) ;
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ex42::ExampleWithARelation"), this) ;
   }
   
   ExampleWithARelationSIOBlock(const std::string &nam ) :
