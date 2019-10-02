@@ -58,6 +58,7 @@ class ClassGenerator(object):
         self.reader.read()
         self.getSyntax = self.reader.options["getSyntax"]
         self.expose_pod_members = self.reader.options["exposePODMembers"]
+        self.createSIOHandlers = self.reader.options["createSIOHandlers"]
         self.process_components(self.reader.components)
         self.process_datatypes(self.reader.datatypes)
         self.create_selection_xml()
@@ -77,7 +78,8 @@ class ClassGenerator(object):
             self.create_class(name, components)
             self.create_collection(name, components)
             self.create_obj(name, components)
-            self.create_sio(name, components)
+            if self.createSIOHandlers:
+              self.create_sio(name, components)
             # self.create_PrintInfo(name, components)
 
     def print_report(self):
