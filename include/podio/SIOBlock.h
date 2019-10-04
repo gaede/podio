@@ -2,6 +2,8 @@
 #define SIOBlock_H
 
 #include <sio/block.h>
+#include <sio/version.h>
+#include <sio/io_device.h>
 
 #include <podio/CollectionBase.h>
 
@@ -20,6 +22,47 @@ namespace podio {
   }
 
 
+  /// helper struct for handling SIO blocks
+  struct SIOMetaData{
+    int colID ;
+    std::string name ;
+    std::string typeName ;
+  } ;
+  
+  // helper class for reading/writing meta data
+  class SIOMetaDataBlock: public sio::block{
+
+  public:
+    std::vector<SIOMetaData> m_vec ;
+
+    SIOMetaDataBlock( const std::string &nam, sio::version_type vers) :
+      sio::block( nam, vers ){
+    }
+    virtual void read( sio::read_device &device,
+		       sio::version_type vers ) override {
+      unsigned size(0);
+      device.data( size );
+      m_vec.resize(size);
+      for(unsigned i=0; i<size;++i){
+	device.data( m_vec[i].colID ) ;
+	device.data( m_vec[i].name ) ;
+	device.data( m_vec[i].typeName ) ;
+      }
+    }
+    virtual void write( sio::write_device &device ) override {
+      unsigned size = m_vec.size() ;
+      device.data( size );
+      for(unsigned i=0; i<size;++i){
+	device.data( m_vec[i].colID ) ;
+	device.data( m_vec[i].name ) ;
+	device.data( m_vec[i].typeName ) ;
+      }
+    }
+    void add(int id, std::string nam, std::string typ){
+      m_vec.push_back( {id,nam,typ} ) ;
+    } 
+  } ;
+
 
 /// Base class for sio::block handlers used with PODIO
   class SIOBlock: public sio::block{
@@ -31,7 +74,14 @@ namespace podio {
       sio::block( nam, vers ){
     }
   
-    void setCollection(podio::CollectionBase* col) { _col = col ; }
+    podio::CollectionBase* getCollection() { return _col; }
+    podio::ICollectionProvider* getCollectionProvider(){ return _store; }
+
+    std::string name(){ return sio::block::name() ; }
+
+    void setCollection(podio::CollectionBase* col) {
+      _col = col ;
+    }
     void setCollectionProvider(podio::ICollectionProvider* iCP ){ _store = iCP ; }
 
     void prepareAfterRead(){ _col->prepareAfterRead(); }

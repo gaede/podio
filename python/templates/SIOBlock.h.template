@@ -25,7 +25,8 @@ public:
   }
   
   ${name}SIOBlock(const std::string &nam ) :
-    SIOBlock( nam+std::string("__${name}"), sio::version::encode_version(0, 1) ){
+    //SIOBlock( nam+std::string("__${name}"), sio::version::encode_version(0, 1) ){
+    SIOBlock(nam , sio::version::encode_version(0, 1) ){
   }
   
   // Read the particle data from the device

@@ -20,6 +20,7 @@
 
 namespace podio {
   class Registry;
+  class SIOMetaDataBlock;
 
   class SIOWriter {
 
@@ -28,6 +29,7 @@ namespace podio {
     ~SIOWriter();
 
     void registerForWrite(const std::string& name);
+    void writeMetaData() ;
     void writeEvent();
     void finish();
 
@@ -40,8 +42,8 @@ namespace podio {
     sio::block_list  m_blocks {} ;
     sio::buffer m_buffer{ sio::mbyte } ;
     sio::buffer m_com_buffer{ sio::mbyte } ;
- 
-    std::vector<CollectionBase*> m_storedCollections{};
+    bool m_metaData = false ;
+    SIOMetaDataBlock* m_metaDataBlock=nullptr;
   };
 
 } //namespace

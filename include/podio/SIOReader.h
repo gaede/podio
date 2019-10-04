@@ -37,7 +37,10 @@ namespace podio {
     ~SIOReader();
     void openFile(const std::string& filename);
     void closeFile();
-    
+
+    // read the meta data record
+    void readMetaData();
+
     /// Read all collections requested
     void readEvent();
     
@@ -56,13 +59,13 @@ namespace podio {
     void registerCollection(const std::string& name, EventStore* store){
 
       // create and register SIOBlock ...
-//      auto& col = store->create<T>(name);
+
       T* col = new T ;
       auto blk = podio::SIOBlockFactory::instance().createBlock( col, name ) ;
 
       if(!blk){
 	std::string typeName = demangleClassName( col ) ;
-	throw std::runtime_error(" could not create black for type: "+typeName );
+	throw std::runtime_error(" could not create block for type: "+typeName );
       }
       
       blk->setCollectionProvider( store ) ;
@@ -89,6 +92,8 @@ namespace podio {
     sio::buffer      m_unc_buffer{ sio::mbyte } ;
     sio::block_list  m_blocks {} ;
 
+    bool m_metaData = false ; 
+    SIOMetaDataBlock* m_metaDataBlock=nullptr;
   };
 
 
