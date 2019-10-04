@@ -31,6 +31,10 @@ public:
   // Write the particle data to the device
   virtual void write(sio::write_device &device) override;
 
+  virtual void createCollection() override {
+    setCollection(new ExampleWithStringCollection);
+  }
+
   SIOBlock *const create(const std::string name) override {
     return new ExampleWithStringSIOBlock(name);
   }

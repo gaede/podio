@@ -54,9 +54,17 @@ namespace podio {
 
       std::cout << "\t " << id << ", " << name  << ", " << typeName << "\n" ; 
 
+      // register sio block
+      auto blk = podio::SIOBlockFactory::instance().createBlock( typeName , name ) ;
+     //fixme: is this needed:
+     // blk->setCollectionProvider( store ) ;
+      m_blocks.push_back( blk ) ;
 
-      
+      blk->getCollection()->setID( id )  ;
 
+      //fixme: is this needed:
+     //store->registerCollection( name, col ) ;
+     //m_table.add( name ) ;
     }
 
     

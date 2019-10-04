@@ -212,20 +212,20 @@ int main(){
   // for now this has to be exact same order as used for writing !
   //  -- will be fixed when meta data is also written to sio file ....
 
-  reader.registerCollection<EventInfoCollection>("info",&store);
-  reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
-  reader.registerCollection<ExampleHitCollection>("hits",&store);
-  reader.registerCollection<ExampleClusterCollection>("clusters",&store);
-  reader.registerCollection<ExampleReferencingTypeCollection>("refs",&store);
-  reader.registerCollection<ExampleReferencingTypeCollection>("refs2",&store);
-  reader.registerCollection<ExampleWithComponentCollection>("Component",&store);
-  reader.registerCollection<ExampleWithOneRelationCollection>("OneRelation",&store);
-  reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
-  reader.registerCollection<ex42::ExampleWithNamespaceCollection>("WithNamespaceMember",&store);
-  reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
-  reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelationCopy",&store);
-  reader.registerCollection<ExampleWithStringCollection>("strings",&store);
-  reader.registerCollection<ExampleWithArrayCollection>("arrays",&store);
+  // // reader.registerCollection<EventInfoCollection>("info",&store);
+  // // reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
+  // // reader.registerCollection<ExampleHitCollection>("hits",&store);
+  // // reader.registerCollection<ExampleClusterCollection>("clusters",&store);
+  // // reader.registerCollection<ExampleReferencingTypeCollection>("refs",&store);
+  // // reader.registerCollection<ExampleReferencingTypeCollection>("refs2",&store);
+  // // reader.registerCollection<ExampleWithComponentCollection>("Component",&store);
+  // // reader.registerCollection<ExampleWithOneRelationCollection>("OneRelation",&store);
+  // // reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
+  // // reader.registerCollection<ex42::ExampleWithNamespaceCollection>("WithNamespaceMember",&store);
+  // // reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
+  // // reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelationCopy",&store);
+  // // reader.registerCollection<ExampleWithStringCollection>("strings",&store);
+  // // reader.registerCollection<ExampleWithArrayCollection>("arrays",&store);
 
   
   try{

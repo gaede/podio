@@ -79,6 +79,7 @@ namespace podio {
 
     std::string name(){ return sio::block::name() ; }
 
+
     void setCollection(podio::CollectionBase* col) {
       _col = col ;
     }
@@ -92,6 +93,9 @@ namespace podio {
     }
 
     virtual SIOBlock* const create(const std::string name)=0 ;
+
+    // create a new collection for this block
+    virtual void createCollection() = 0; 
   
   protected:
   
@@ -119,6 +123,19 @@ namespace podio {
       if( it!= _map.end() ){
 	SIOBlock* blk= it->second->create( name ) ;
 	blk->setCollection( const_cast< podio::CollectionBase* > ( col ) ) ;
+	return  std::shared_ptr<SIOBlock>( blk ) ;
+      }else{
+	return nullptr;
+      }
+    }
+    // return a block with a new collection (used for reading )
+    std::shared_ptr<SIOBlock> createBlock( std::string typeStr, std::string name){
+
+      auto it=_map.find(typeStr) ;
+    
+      if( it!= _map.end() ){
+	SIOBlock* blk= it->second->create( name ) ;
+	blk->createCollection() ;
 	return  std::shared_ptr<SIOBlock>( blk ) ;
       }else{
 	return nullptr;
