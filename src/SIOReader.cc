@@ -11,8 +11,11 @@ namespace podio {
 
   CollectionBase* SIOReader::readCollection(const std::string& name) {
     
-    //  here we return only collections allready read form the file in readEvent()
-    
+    // if( m_lastEvtRead != m_eventNumber ){
+    //   readEvent() ;
+    //   m_lastEvtRead = m_eventNumber ;
+    // }
+
     auto p = std::find_if(begin(m_inputs), end(m_inputs),
 			  [name](SIOReader::Input t){ return t.second == name;});
     
@@ -56,22 +59,23 @@ namespace podio {
 
       // register sio block
       auto blk = podio::SIOBlockFactory::instance().createBlock( typeName , name ) ;
-     //fixme: is this needed:
-     // blk->setCollectionProvider( store ) ;
+
+      blk->setCollectionProvider( m_store ) ;
+
       m_blocks.push_back( blk ) ;
 
       blk->getCollection()->setID( id )  ;
 
-      //fixme: is this needed:
-     //store->registerCollection( name, col ) ;
-     //m_table.add( name ) ;
+      m_inputs.push_back( std::make_pair( blk->getCollection() , name ) ) ;
+
+      m_table.add( name ) ;
     }
 
     
   }
 
   void SIOReader::readEvent(){
-  
+
     if( ! m_metaData ){
       readMetaData() ;
       m_metaData = true ;
@@ -105,10 +109,10 @@ namespace podio {
     // TODO: who deletes the buffers?
   }
 
-// void SIOReader::endOfEvent() {
-//   ++m_eventNumber;
+ void SIOReader::endOfEvent() {
+   ++m_eventNumber;
 //   m_inputs.clear();
-// }
+ }
 
 
 } //namespace

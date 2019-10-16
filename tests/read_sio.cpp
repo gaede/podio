@@ -204,29 +204,8 @@ int main(){
   podio::SIOReader reader; // SIOReader has no copy c'tor ...
   auto store = podio::EventStore();
   reader.openFile("example.sio");
-// do not call this as this expects the meta data table to be read on opening the file
-//  store.setReader(&reader);
-
-
-  // define which collections to read from the file
-  // for now this has to be exact same order as used for writing !
-  //  -- will be fixed when meta data is also written to sio file ....
-
-  // // reader.registerCollection<EventInfoCollection>("info",&store);
-  // // reader.registerCollection<ExampleMCCollection>("mcparticles",&store);
-  // // reader.registerCollection<ExampleHitCollection>("hits",&store);
-  // // reader.registerCollection<ExampleClusterCollection>("clusters",&store);
-  // // reader.registerCollection<ExampleReferencingTypeCollection>("refs",&store);
-  // // reader.registerCollection<ExampleReferencingTypeCollection>("refs2",&store);
-  // // reader.registerCollection<ExampleWithComponentCollection>("Component",&store);
-  // // reader.registerCollection<ExampleWithOneRelationCollection>("OneRelation",&store);
-  // // reader.registerCollection<ExampleWithVectorMemberCollection>("WithVectorMember",&store);
-  // // reader.registerCollection<ex42::ExampleWithNamespaceCollection>("WithNamespaceMember",&store);
-  // // reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelation",&store);
-  // // reader.registerCollection<ex42::ExampleWithARelationCollection>("WithNamespaceRelationCopy",&store);
-  // // reader.registerCollection<ExampleWithStringCollection>("strings",&store);
-  // // reader.registerCollection<ExampleWithArrayCollection>("arrays",&store);
-
+  store.setReader(&reader);
+  reader.setStore(&store);
   
   try{
     unsigned nEvents = 1410065408 ;
@@ -242,6 +221,8 @@ int main(){
       // only clear collections for re-use
       store.clearCollections();
       // store.clear(); // this would delete the collections as well ...
+      reader.endOfEvent();
+
     }
   }
   catch( sio::exception &e ) {

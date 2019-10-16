@@ -37,6 +37,9 @@ namespace podio {
     /// returns assigned collection ID
     int add(const std::string& name);
 
+    /// register new name to the table with the given collection ID
+    void add(int collectionID, const std::string& name);
+
     /// Prints collection information
     void print() const;
 

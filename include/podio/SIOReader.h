@@ -53,37 +53,39 @@ namespace podio {
     /// Implementation for collection reading
     CollectionBase* readCollection(const std::string& name) override final;
 
+    void setStore(EventStore* store){ m_store = store; }
 
-    /// request the named collection of type T to be read and register with store
-    template<typename T>
-    void registerCollection(const std::string& name, EventStore* store){
+    // /// request the named collection of type T to be read and register with store
+    // template<typename T>
+    // void registerCollection(const std::string& name, EventStore* store){
 
-      // create and register SIOBlock ...
+    //   // create and register SIOBlock ...
 
-      T* col = new T ;
-      auto blk = podio::SIOBlockFactory::instance().createBlock( col, name ) ;
+    //   T* col = new T ;
+    //   auto blk = podio::SIOBlockFactory::instance().createBlock( col, name ) ;
 
-      if(!blk){
-	std::string typeName = demangleClassName( col ) ;
-	throw std::runtime_error(" could not create block for type: "+typeName );
-      }
+    //   if(!blk){
+    // 	std::string typeName = demangleClassName( col ) ;
+    // 	throw std::runtime_error(" could not create block for type: "+typeName );
+    //   }
       
-      blk->setCollectionProvider( store ) ;
+    //   blk->setCollectionProvider( store ) ;
 
-      m_blocks.push_back( blk ) ;
+    //   m_blocks.push_back( blk ) ;
 
-      store->registerCollection( name, col ) ;
+    //   store->registerCollection( name, col ) ;
       
-      m_table.add( name ) ;
-    }
+    //   m_table.add( name ) ;
+    // }
     
-    void endOfEvent(){ /*no_opt */}
+    void endOfEvent();
 
   private:
     typedef std::pair<CollectionBase*, std::string> Input;
     std::vector<Input> m_inputs;
     CollectionIDTable m_table{};
-    unsigned m_eventNumber;
+    int m_eventNumber{0};
+    int m_lastEvtRead{-1};
     
     sio::ifstream    m_stream{} ;
     sio::record_info m_rec_info{} ;
@@ -94,6 +96,7 @@ namespace podio {
 
     bool m_metaData = false ; 
     SIOMetaDataBlock* m_metaDataBlock=nullptr;
+    EventStore* m_store=nullptr;
   };
 
 

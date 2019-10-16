@@ -50,4 +50,23 @@ namespace podio {
     return ID;
   }
 
+  void CollectionIDTable::add(int collectionID, const std::string& name){
+
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
+    auto result = std::find(begin(m_names), end(m_names), name);
+    if (result == m_names.end()) {
+      m_names.emplace_back(name);
+      m_collectionIDs.emplace_back( collectionID );
+    } else {
+        auto index = result - m_names.begin();
+        int ID = m_collectionIDs[index];
+	if( ID != collectionID ){
+
+	  std::cout << "CollectionIDTable::add(" << collectionID << ", " << name << ")  - collection "
+		    << " already registered with different ID: " << ID << std::endl ;
+	  exit(1) ;
+	}
+    }
+  }
+
 } // namespace
