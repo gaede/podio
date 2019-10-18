@@ -1,45 +1,52 @@
-// AUTOMATICALLY GENERATED - DO NOT EDIT
+//AUTOMATICALLY GENERATED - DO NOT EDIT
 #ifndef ExampleReferencingTypeSIOBlock_H
 #define ExampleReferencingTypeSIOBlock_H
 
 #include "podio/SIOBlock.h"
 
-#include "ExampleReferencingTypeCollection.h"
 #include <sio/api.h>
-#include <sio/io_device.h>
 #include <sio/version.h>
+#include <sio/io_device.h>
+#include "ExampleReferencingTypeCollection.h"
 
-#include <typeindex>
+#include  <typeindex>
 
-class ExampleReferencingTypeSIOBlock : public podio::SIOBlock {
 
+
+
+class ExampleReferencingTypeSIOBlock: public podio::SIOBlock{
+  
 public:
-  ExampleReferencingTypeSIOBlock()
-      : SIOBlock("ExampleReferencingType", sio::version::encode_version(0, 1)) {
-    podio::SIOBlockFactory::instance().registerBlockForCollection(
-        std::string("ExampleReferencingType"), this);
+  
+  
+  ExampleReferencingTypeSIOBlock() :
+    SIOBlock( "ExampleReferencingType", sio::version::encode_version(0, 1) ){
+    podio::SIOBlockFactory::instance().registerBlockForCollection( std::string("ExampleReferencingType"), this) ;
   }
-
-  ExampleReferencingTypeSIOBlock(const std::string &nam)
-      : // SIOBlock( nam+std::string("__ExampleReferencingType"),
-        // sio::version::encode_version(0, 1) ){
-        SIOBlock(nam, sio::version::encode_version(0, 1)) {}
-
+  
+  ExampleReferencingTypeSIOBlock(const std::string &nam ) :
+    //SIOBlock( nam+std::string("__ExampleReferencingType"), sio::version::encode_version(0, 1) ){
+    SIOBlock(nam , sio::version::encode_version(0, 1) ){
+  }
+  
   // Read the particle data from the device
-  virtual void read(sio::read_device &device, sio::version_type vers) override;
-
+  virtual void read( sio::read_device &device,
+         sio::version_type vers ) override ;
+  
   // Write the particle data to the device
-  virtual void write(sio::write_device &device) override;
-
-  virtual void createCollection() override {
-    setCollection(new ExampleReferencingTypeCollection);
+  virtual void write( sio::write_device &device ) override ;
+  
+  virtual  void createCollection() override {
+    setCollection(  new ExampleReferencingTypeCollection ) ;
   }
 
-  SIOBlock *const create(const std::string name) override {
-    return new ExampleReferencingTypeSIOBlock(name);
-  }
+  SIOBlock* const create(const std::string name) override { return new ExampleReferencingTypeSIOBlock(name) ; }
+
 };
 
-static ExampleReferencingTypeSIOBlock _dummyExampleReferencingTypeSIOBlock;
+
+static ExampleReferencingTypeSIOBlock _dummyExampleReferencingTypeSIOBlock ;
+
+
 
 #endif

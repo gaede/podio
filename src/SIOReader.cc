@@ -27,7 +27,7 @@ namespace podio {
     m_stream.open( filename , std::ios::binary ) ;
 
     m_metaDataBlock = new SIOMetaDataBlock( "meta_data" , sio::version::encode_version(0, 1) ) ;
- }
+  }
 
 
   void SIOReader::closeFile(){
@@ -48,14 +48,10 @@ namespace podio {
 
     sio::api::read_blocks( m_rec_buffer.span( 0, rec_info._data_length ), blocks ) ;
 
-    
-    std::cout << " read meta data: \n" ;
     for(auto& mb :  m_metaDataBlock->m_vec ){
       std::string name = mb.name ;
       std::string typeName = mb.typeName ;
       int id = mb.colID; 
-
-      std::cout << "\t " << id << ", " << name  << ", " << typeName << "\n" ; 
 
       // register sio block
       auto blk = podio::SIOBlockFactory::instance().createBlock( typeName , name ) ;
@@ -64,11 +60,12 @@ namespace podio {
 
       m_blocks.push_back( blk ) ;
 
-      blk->getCollection()->setID( id )  ;
-
       m_inputs.push_back( std::make_pair( blk->getCollection() , name ) ) ;
 
-      m_table.add( name ) ;
+      // register collection with the store and then reset the ID to the one read from the file
+      CollectionBase* col = blk->getCollection() ;
+      m_store->registerCollection( name, col ) ;
+      col->setID( id )  ;
     }
 
     

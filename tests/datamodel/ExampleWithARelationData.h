@@ -1,6 +1,8 @@
 #ifndef ExampleWithARelationDATA_H
 #define ExampleWithARelationDATA_H
 
+
+
 namespace ex42 {
 /** @class ExampleWithARelationData
  *  Type with namespace and namespaced relation
@@ -9,7 +11,7 @@ namespace ex42 {
 
 class ExampleWithARelationData {
 public:
-  float number; ///< just a number
+  float number;  ///< just a number
   unsigned int refs_begin;
   unsigned int refs_end;
 };
