@@ -17,7 +17,9 @@ namespace podio {
     m_datatree(new TTree("events","Events tree")),
     m_metadatatree(new TTree("metadata", "Metadata tree"))
   {
-    // m_file->SetCompressionAlgorithm(ROOT::RCompressionSetting::EAlgorithm::kZLIB );
+    m_file->SetCompressionAlgorithm(ROOT::RCompressionSetting::EAlgorithm::kZLIB );
+    m_file->SetCompressionLevel(6);  // Z_DEFAULT_COMPRESSION==6
+
     // m_file->SetCompressionLevel(ROOT::RCompressionSetting::ELevel::kDefaultZLIB);
     // m_file->SetCompressionAlgorithm(ROOT::RCompressionSetting::EAlgorithm::kLZ4 );
     // m_file->SetCompressionLevel(ROOT::RCompressionSetting::ELevel::kDefaultLZ4);
