@@ -146,3 +146,11 @@ datatypes :
       - std::array<int, 4> snail_case_array // snail case to test regex
       - std::array<int, 4> snail_case_Array3 // mixing things up for regex
       - std::array<ex2::NamespaceStruct, 4> structArray // an array containing structs
+
+##  UserData:
+##    Description: "User data with int, float and double arrays"
+##    Author: "F.Gaede, DESY"
+##    Members:
+##      - std::array<int, 4201> intvals       // integer values
+##      - std::array<float, 4202> floatvals   // float   values
+##      - std::array<double, 4203> doublevals // double  values    
