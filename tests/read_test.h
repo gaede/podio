@@ -40,11 +40,13 @@ void processEvent(podio::EventStore& store, bool verboser, unsigned eventNum) {
   }
 
 
-
-  auto& failing = store.get<ExampleClusterCollection>("notthere");
-  if(failing.isValid() == true) {
-    throw std::runtime_error("Collection 'notthere' should not be valid");
-  };
+  try {
+    auto& failing = store.get<ExampleClusterCollection>("notthere");
+  } catch(const std::runtime_error& err) {
+    if (std::string(err.what()) != "No collection \'notthere\' is present in the EventStore") {
+      throw std::runtime_error("Trying to get non present collection \'notthere' should throw an exception");
+    }
+  }
 
   auto& strings = store.get<ExampleWithStringCollection>("strings");
   if(strings.isValid()){
