@@ -4,7 +4,7 @@ const std::array<{{ member.full_type }}, arraysize> {{ class.bare_type }}Collect
   std::array<{{ member.full_type }}, arraysize> tmp;
   const auto valid_size = std::min(arraysize, m_entries.size());
   for (unsigned i = 0; i < valid_size; ++i) {
-    tmp[i] = m_entries[i]->data.{{ member.name }};
+    tmp[i] = m_entries[i]->data->{{ member.name }};
   }
   return tmp;
 }

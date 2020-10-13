@@ -30,11 +30,12 @@ public:
   {{ obj_type }}(const {{ obj_type }}&);
   /// constructor from ObjectID and {{ class.bare_type }}Data
   /// does not initialize the internal relation containers
-  {{ obj_type }}(const podio::ObjectID id, {{ class.bare_type }}Data data);
+  {{ obj_type }}(const podio::ObjectID id, {{ class.bare_type }}Data* data);
   virtual ~{{ obj_type }}();
-
+private:
+  {{ class.bare_type }}Data* mydata=nullptr;
 public:
-  {{ class.bare_type }}Data data;
+  {{ class.bare_type }}Data* data;
 {% for relation in OneToOneRelations %}
   {{ relation.relation_type }}* m_{{ relation.name }};
 {% endfor %}

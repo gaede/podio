@@ -108,7 +108,7 @@ void {{ collection_type }}::clear() {
 void {{ collection_type }}::prepareForWrite() {
   const auto size = m_entries.size();
   m_data->reserve(size);
-  for (auto& obj : m_entries) { m_data->push_back(obj->data); }
+  for (auto& obj : m_entries) { m_data->push_back(*obj->data); }
   for (auto& pointer : m_refCollections) { pointer->clear(); }
 
 {% for relation in OneToManyRelations %}
@@ -139,7 +139,7 @@ void {{ collection_type }}::prepareForWrite() {
 void {{ collection_type }}::prepareAfterRead() {
   int index = 0;
   for (auto& data : *m_data) {
-    auto obj = new {{ class.bare_type }}Obj({index, m_collectionID}, data);
+    auto obj = new {{ class.bare_type }}Obj({index, m_collectionID}, &data);
 
 {% for relation in OneToManyRelations %}
     obj->m_{{ relation.name }} = m_rel_{{ relation.name }};
@@ -153,7 +153,7 @@ void {{ collection_type }}::prepareAfterRead() {
 
   // at this point we are done with the I/O buffer and can safely clear it to not
   // have a redundant (but now useless) copy of the data
-  m_data->clear();
+  //m_data->clear();
   m_isValid = true;
 }
 

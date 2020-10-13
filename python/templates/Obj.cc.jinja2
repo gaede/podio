@@ -17,14 +17,15 @@
 {% with obj_type = class.bare_type + 'Obj' %}
 {{ obj_type }}::{{ obj_type }}() :
 {% raw %}  ObjBase{{podio::ObjectID::untracked, podio::ObjectID::untracked}, 0}{% endraw %},
-  data(){{ single_relations_initialize(OneToOneRelations) }}
+mydata(new {{ class.bare_type }}Data),
+data(mydata){{ single_relations_initialize(OneToOneRelations) }}
 {%- for relation in OneToManyRelations + VectorMembers %},
   m_{{ relation.name }}(new std::vector<{{ relation.relation_type }}>())
 {%- endfor %}
 
 {  }
 
-{{ obj_type }}::{{ obj_type }}(const podio::ObjectID id, {{ class.bare_type }}Data data) :
+{{ obj_type }}::{{ obj_type }}(const podio::ObjectID id, {{ class.bare_type }}Data* data) :
   ObjBase{id, 0}, data(data)
 {  }
 

@@ -8,7 +8,7 @@
 {{ full_type }}::{{ full_type }}({{ members | map(attribute='signature') | join(', ') }}) : m_obj(new {{ type }}Obj()) {
   m_obj->acquire();
 {% for member in members %}
-  m_obj->data.{{ member.name }} = {{ member.name }};
+  m_obj->data->{{ member.name }} = {{ member.name }};
 {% endfor %}
 }
 {% endif %}
@@ -40,13 +40,13 @@
 {% macro member_getters(class, members, get_syntax, prefix='') %}
 {% set class_type = prefix + class.bare_type %}
 {% for member in members %}
-const {{ member.full_type }}& {{ class_type }}::{{ member.getter_name(get_syntax) }}() const { return m_obj->data.{{ member.name }}; }
+const {{ member.full_type }}& {{ class_type }}::{{ member.getter_name(get_syntax) }}() const { return m_obj->data->{{ member.name }}; }
 {% if member.is_array %}
-const {{ member.array_type }}& {{ class_type }}::{{ member.getter_name(get_syntax) }}(size_t i) const { return m_obj->data.{{ member.name }}.at(i); }
+const {{ member.array_type }}& {{ class_type }}::{{ member.getter_name(get_syntax) }}(size_t i) const { return m_obj->data->{{ member.name }}.at(i); }
 {% endif %}
 {% if member.sub_members %}
 {% for sub_member in member.sub_members %}
-const {{ sub_member.full_type }}& {{ class_type }}::{{ sub_member.getter_name(get_syntax) }}() const { return m_obj->data.{{ member.name }}.{{ sub_member.name }}; }
+const {{ sub_member.full_type }}& {{ class_type }}::{{ sub_member.getter_name(get_syntax) }}() const { return m_obj->data->{{ member.name }}.{{ sub_member.name }}; }
 {% endfor %}
 {%- endif %}
 {% endfor %}
@@ -55,18 +55,18 @@ const {{ sub_member.full_type }}& {{ class_type }}::{{ sub_member.getter_name(ge
 
 {% macro member_setters(class, members, get_syntax) %}
 {% for member in members %}
-void {{ class.bare_type }}::{{ member.setter_name(get_syntax) }}({{ member.full_type }} value) { m_obj->data.{{ member.name }} = value; }
+void {{ class.bare_type }}::{{ member.setter_name(get_syntax) }}({{ member.full_type }} value) { m_obj->data->{{ member.name }} = value; }
 {% if member.is_array %}
-void {{ class.bare_type }}::{{ member.setter_name(get_syntax) }}(size_t i, {{ member.array_type }} value) { m_obj->data.{{ member.name }}.at(i) = value; }
+void {{ class.bare_type }}::{{ member.setter_name(get_syntax) }}(size_t i, {{ member.array_type }} value) { m_obj->data->{{ member.name }}.at(i) = value; }
 {% endif %}
 {% if not member.is_builtin %}
-{{ member.full_type }}& {{ class.bare_type }}::{{ member.name }}() { return m_obj->data.{{ member.name }}; }
+{{ member.full_type }}& {{ class.bare_type }}::{{ member.name }}() { return m_obj->data->{{ member.name }}; }
 {% endif %}
 {% if member.sub_members %}
 {% for sub_member in member.sub_members %}
-void {{ class.bare_type }}::{{ sub_member.setter_name(get_syntax) }}({{ sub_member.full_type }} value) { m_obj->data.{{ member.name }}.{{ sub_member.name }} = value; }
+void {{ class.bare_type }}::{{ sub_member.setter_name(get_syntax) }}({{ sub_member.full_type }} value) { m_obj->data->{{ member.name }}.{{ sub_member.name }} = value; }
 {% if not sub_member.is_builtin %}
-{{ sub_member.full_type }}& {{ class.bare_type }}::{{ sub_member.name }}() { return m_obj->data.{{ member.name }}.{{ sub_member.name }}; }
+{{ sub_member.full_type }}& {{ class.bare_type }}::{{ sub_member.name }}() { return m_obj->data->{{ member.name }}.{{ sub_member.name }}; }
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -105,38 +105,38 @@ void {{ class.bare_type }}::{{ relation.setter_name(get_syntax) }}({{ relation.n
 {% if with_adder %}
 void {{ class_type }}::{{ relation.setter_name(get_syntax, is_relation=True) }}({{ relation.relation_type }} component) {
   m_obj->m_{{ relation.name }}->push_back(component);
-  m_obj->data.{{ relation.name }}_end++;
+  m_obj->data->{{ relation.name }}_end++;
 }
 {% endif %}
 
 std::vector<{{ relation.relation_type }}>::const_iterator {{ class_type }}::{{ relation.name }}_begin() const {
   auto ret_value = m_obj->m_{{ relation.name }}->begin();
-  std::advance(ret_value, m_obj->data.{{ relation.name }}_begin);
+  std::advance(ret_value, m_obj->data->{{ relation.name }}_begin);
   return ret_value;
 }
 
 std::vector<{{ relation.relation_type }}>::const_iterator {{ class_type }}::{{ relation.name }}_end() const {
   auto ret_value = m_obj->m_{{ relation.name }}->begin();
-  std::advance(ret_value, m_obj->data.{{ relation.name }}_end);
+  std::advance(ret_value, m_obj->data->{{ relation.name }}_end);
   return ret_value;
 }
 
 unsigned int {{ class_type }}::{{ relation.name }}_size() const {
-  return m_obj->data.{{ relation.name }}_end - m_obj->data.{{ relation.name }}_begin;
+  return m_obj->data->{{ relation.name }}_end - m_obj->data->{{ relation.name }}_begin;
 }
 
 {{ relation.relation_type }} {{ class_type }}::{{ relation.getter_name(get_syntax) }}(unsigned int index) const {
   if ({{ relation.name }}_size() > index) {
-    return m_obj->m_{{ relation.name }}->at(m_obj->data.{{ relation.name }}_begin + index);
+    return m_obj->m_{{ relation.name }}->at(m_obj->data->{{ relation.name }}_begin + index);
   }
   throw std::out_of_range("index out of bounds for existing references");
 }
 
 podio::RelationRange<{{ relation.relation_type }}> {{ class_type }}::{{ relation.getter_name(get_syntax) }}() const {
   auto begin = m_obj->m_{{ relation.name }}->begin();
-  std::advance(begin, m_obj->data.{{ relation.name }}_begin);
+  std::advance(begin, m_obj->data->{{ relation.name }}_begin);
   auto end = m_obj->m_{{ relation.name }}->begin();
-  std::advance(end, m_obj->data.{{ relation.name }}_end);
+  std::advance(end, m_obj->data->{{ relation.name }}_end);
   return {begin, end};
 }
 
